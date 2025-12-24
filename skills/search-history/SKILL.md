@@ -20,7 +20,7 @@ Search through Claude Code conversation history to find relevant past discussion
 Run the search script from the platform services directory:
 
 ```bash
-cd C:/Users/Roger/Documents/GitHub/bazel-test/platform/services
+cd C:/Users/Roger/Documents/GitHub/dev-experience/services
 python conversation-search.py "search term"
 ```
 
