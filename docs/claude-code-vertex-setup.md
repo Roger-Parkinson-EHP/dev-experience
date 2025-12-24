@@ -1,6 +1,24 @@
 # Claude Code + Vertex AI Setup Guide
 
-This guide will help you set up Claude Code to use Claude Opus 4.5 via Google Cloud Vertex AI (FedRAMP compliant).
+This guide will help you set up Claude Code to use Claude Opus 4.5 via Google Cloud Vertex AI.
+
+## Why Vertex AI?
+
+**Compliance Built Into Infrastructure**: By using Vertex AI, all Claude API calls go through Google Cloud infrastructure that meets multiple compliance frameworks:
+
+| Framework | Status |
+|-----------|--------|
+| FedRAMP High | Authorized |
+| PCI-DSS | Compliant |
+| DoD IL4/IL5 | Eligible (us-east5) |
+| SOC 2 Type II | Compliant |
+
+Additional guarantees:
+- Full audit logging in GCP Cloud Logging
+- Your data is **never** used for model training
+- All traffic stays within authorized infrastructure
+
+**Your Own Instance**: You're inferencing from your organization's own GCP project, not shared infrastructure. This enables work with government and financial sector clients without additional compliance overhead.
 
 ## Prerequisites
 

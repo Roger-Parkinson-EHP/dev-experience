@@ -1,84 +1,102 @@
-# DevTools
+# dev-experience
 
-Developer tools and configuration for Claude Code, speech-to-text, and AI-assisted development.
+Developer experience tools for working with Claude Code on FedRAMP-compliant infrastructure.
 
-## What's Included
+## What's This?
 
-### WhisperFlow
-Local speech-to-text using OpenAI Whisper. Press a hotkey, speak, and text is pasted to cursor.
-
-```bash
-cd whisperflow
-pip install -r requirements.txt
-python -m whisperflow
-```
-
-### Claude Code Skills
-Custom skills for Claude Code that extend its capabilities.
-
-- **search-history**: Search conversation history from JSONL files
-- Copy to `~/.claude/skills/` to activate
-
-### Claude Code Setup
-Scripts and documentation for setting up Claude Code with Vertex AI.
-
-- GCP project configuration
-- Environment variables (Windows/Mac/Linux)
-- API quota setup
-
-### Conversation Services
-Tools for managing Claude conversation history.
-
-- **conversation-search**: Search JSONL transcripts
-- **conversation-indexer**: Generate markdown summaries
-- **daily-dashboard**: Visualize usage patterns
+This repo helps you:
+1. **Set up Claude Code** with Vertex AI (FedRAMP High compliant)
+2. **Use WhisperFlow** for speech-to-text while coding
+3. **Search conversation history** to find past solutions
 
 ## Quick Start
 
-### Windows
+### 1. Validate Your Setup
+
 ```powershell
-# 1. Clone this repo
-git clone https://github.com/yourorg/DevTools.git
-
-# 2. Run setup script
-.\setup\windows\setup-claude-code.ps1
-
-# 3. Install WhisperFlow
-cd whisperflow
-pip install -r requirements.txt
+# Windows
+.\setup\windows\validate-vertex-setup.ps1
 ```
 
-### Mac/Linux
+Expected output:
+```
+SUCCESS: Your setup is configured for FedRAMP-compliant Vertex AI!
+
+You are inferencing from:
+  - Project: licensecorporation-dev
+  - Region: us-east5
+  - Provider: Google Cloud Vertex AI (FedRAMP High)
+```
+
+### 2. Start WhisperFlow (Speech-to-Text)
+
+```powershell
+cd whisperflow
+pip install -r requirements.txt
+python run.py
+```
+
+**Usage**: Press `Ctrl+Shift+Space` to start recording, speak, press again to stop. Text is pasted to cursor.
+
+### 3. Search Conversation History
+
 ```bash
-# 1. Clone this repo
-git clone https://github.com/yourorg/DevTools.git
-
-# 2. Run setup script
-./setup/unix/setup-claude-code.sh
-
-# 3. Install WhisperFlow
-cd whisperflow
-pip install -r requirements.txt
+cd services
+python conversation-search.py "search term"
+python conversation-search.py --list-sessions
 ```
+
+## Compliance Built-In
+
+By using Claude Code with Vertex AI, compliance is automatic - not a blocker:
+
+| Framework | Status |
+|-----------|--------|
+| FedRAMP High | Authorized |
+| PCI-DSS | Compliant infrastructure |
+| DoD IL4/IL5 | Eligible (us-east5 region) |
+| SOC 2 Type II | Compliant |
+| Data used for training | Never |
+| Audit logging | GCP Cloud Logging |
+
+You're running on **your own GCP project** with full audit trail. Just write code - compliance is handled by the infrastructure.
 
 ## Directory Structure
 
 ```
-DevTools/
-├── whisperflow/           # Speech-to-text application
-├── skills/                # Claude Code custom skills
-├── services/              # Conversation indexing/search
+dev-experience/
 ├── setup/
-│   ├── windows/           # Windows setup scripts
-│   └── unix/              # Mac/Linux setup scripts
+│   └── windows/
+│       └── validate-vertex-setup.ps1    # Validate your setup
+├── whisperflow/                          # Speech-to-text service
+├── services/
+│   └── conversation-search.py           # Search JSONL history
+├── skills/
+│   └── search-history/                  # Claude Code skill
 └── docs/
-    ├── claude-code-setup.md
-    ├── vertex-ai-setup.md
-    └── environment-variables.md
+    └── claude-code-vertex-setup.md      # Full setup guide
+```
+
+## Need Full Setup?
+
+See [docs/claude-code-vertex-setup.md](docs/claude-code-vertex-setup.md) for complete installation instructions.
+
+## Custom Vocabulary (WhisperFlow)
+
+WhisperFlow uses a custom vocabulary to correctly recognize technical terms. Edit `~/.whisperflow/config.json`:
+
+```json
+{
+  "custom_vocabulary": "Claude Code, FedRAMP, HIPAA, Vertex AI, ..."
+}
 ```
 
 ## Requirements
 
 - Python 3.10+
 - Claude Code CLI
-- GCP account (for Vertex AI)
+- GCP account with Vertex AI access
+
+## License
+
+MIT
