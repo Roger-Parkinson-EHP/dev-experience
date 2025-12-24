@@ -79,28 +79,71 @@ python conversation-search.py "vertex ai" --max 5 --full
 
 ## Using Other Models in Claude Code
 
-Claude Code can access other AI models (Gemini, GPT, etc.) via MCP servers:
+Claude Code can access other AI models via MCP servers, including using them as subagents.
 
-### Available MCP Integrations
+### Vertex AI Model Garden
 
-| MCP Server | Models Supported |
-|------------|------------------|
-| [Zen MCP](https://claudelog.com/claude-code-mcps/zen-mcp-server/) | Gemini Pro, OpenAI O3, Grok |
-| [OpenRouter MCP](https://playbooks.com/mcp/slyfox1186-openrouter) | 400+ models including GPT-4, Gemini |
-| [PAL MCP](https://www.xugj520.cn/en/archives/pal-mcp-guide-orchestrate-ai-models.html) | OpenAI, Google, Azure, Ollama |
+Your GCP project has access to 200+ models. Key text generation models:
 
-### Example: Add Gemini to Claude Code
+**Google Gemini (Latest)**
+| Model | ID | Best For |
+|-------|-----|----------|
+| Gemini 3 Pro Preview | `gemini-3-pro-preview` | Most powerful agentic/coding |
+| Gemini 3 Flash Preview | `gemini-3-flash-preview` | Balanced speed/quality |
+| Gemini 2.5 Pro | `gemini-2.5-pro` | GA, code & complex prompts |
+| Gemini 2.5 Flash | `gemini-2.5-flash` | GA, reasoning + speed |
 
-```bash
-npm install -g gemini-mcp-tool
-claude mcp add -s local gemini-cli -- npx -y gemini-mcp-tool
+**Partner Models (Managed API)**
+| Model | ID | Notes |
+|-------|-----|-------|
+| DeepSeek V3.2 | `deepseek-v3.2` | Strong coding |
+| DeepSeek R1 | `deepseek-r1` | Reasoning model |
+| Llama 4 | `llama-4` | Meta's latest |
+| Codestral 2 | `codestral-2` | Mistral code model |
+| Qwen3 Coder | `qwen3-coder` | Code-specialized |
+| GPT OSS | `gpt-oss` | OpenAI open weights |
+
+**Note**: Proprietary OpenAI models (GPT-4, o1, o3) are NOT in Model Garden. Use OpenRouter MCP for those.
+
+### MCP Integration Options
+
+| MCP Server | Use Case |
+|------------|----------|
+| [Vertex AI MCP](https://playbooks.com/mcp/vertex-ai-gemini) | Access Gemini via Vertex (FedRAMP) |
+| [PAL MCP](https://github.com/BeehiveInnovations/pal-mcp-server) | Multi-model subagents |
+| [OpenRouter MCP](https://playbooks.com/mcp/slyfox1186-openrouter) | 400+ models (including proprietary) |
+
+### Subagents with Different Models
+
+Claude Code subagents can use different models via MCP. Example architecture:
+
+```
+Claude Opus 4.5 (orchestrator)
+    ├── Gemini 3 Pro subagent (large codebase analysis)
+    ├── DeepSeek R1 subagent (complex reasoning)
+    └── Gemini 3 Flash subagent (fast tasks)
 ```
 
-### Why Multi-Model?
+Benefits:
+- **Parallel processing**: Multiple models working simultaneously
+- **Context isolation**: Subagents have separate context windows
+- **Specialization**: Route tasks to best-fit models
+- **Cost optimization**: Use cheaper models for simple tasks
 
-- **Backup**: When Claude hits rate limits, use Gemini or GPT
-- **Specialization**: Use Gemini's large context for big codebases
-- **Cost**: Route simple tasks to cheaper models
+### Quick Setup: Gemini via Vertex AI
+
+```bash
+# Add Gemini 3 Pro
+claude mcp add-json "gemini-3-pro" '{
+  "command": "bunx",
+  "args": ["-y", "vertex-ai-mcp-server"],
+  "env": {
+    "GOOGLE_CLOUD_PROJECT": "licensecorporation-dev",
+    "VERTEX_MODEL_ID": "gemini-3-pro-preview",
+    "GOOGLE_CLOUD_LOCATION": "us-central1"
+  }
+}'
+```
 
 ---
 
