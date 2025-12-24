@@ -1,4 +1,4 @@
-# Claude Code + Vertex AI Setup (Windows)
+# Claude Code + Vertex AI Setup (macOS / Linux)
 
 Configure Claude Code to use Anthropic models via Google Cloud Vertex AI Model Garden for FedRAMP-compliant inference.
 
@@ -44,7 +44,7 @@ Configure Claude Code to use Anthropic models via Google Cloud Vertex AI Model G
 
 ## Step 1: GCP Authentication
 
-```powershell
+```bash
 # Login with your @licensecorporation.com account
 gcloud auth login
 
@@ -59,26 +59,27 @@ gcloud auth application-default login
 
 ## Step 2: Environment Variables
 
-Add to your PowerShell profile (`notepad $PROFILE`):
+Add to your shell profile (`~/.bashrc`, `~/.zshrc`, or `~/.profile`):
 
-```powershell
+```bash
 # Vertex AI Model Garden Configuration
-$env:CLAUDE_CODE_USE_VERTEX = "1"
-$env:ANTHROPIC_VERTEX_PROJECT_ID = "licensecorporation-dev"
-$env:CLOUD_ML_REGION = "us-east5"
+export CLAUDE_CODE_USE_VERTEX="1"
+export ANTHROPIC_VERTEX_PROJECT_ID="licensecorporation-dev"
+export CLOUD_ML_REGION="us-east5"
 ```
 
 Reload your profile:
-```powershell
-. $PROFILE
+```bash
+source ~/.bashrc  # or ~/.zshrc
 ```
 
 ---
 
 ## Step 3: Validate Setup
 
-```powershell
-.\validate-vertex-setup.ps1
+```bash
+chmod +x validate-vertex-setup.sh
+./validate-vertex-setup.sh
 ```
 
 ### Expected Output
@@ -138,3 +139,25 @@ All API calls are logged in GCP Cloud Logging for audit compliance.
 | Wrong project | `gcloud config set project licensecorporation-dev` |
 | API not enabled | `gcloud services enable aiplatform.googleapis.com` |
 | Permission denied | Request IAM role: `roles/aiplatform.user` |
+
+---
+
+## macOS-Specific Notes
+
+If using zsh (default on macOS):
+```bash
+# Add to ~/.zshrc
+export CLAUDE_CODE_USE_VERTEX="1"
+export ANTHROPIC_VERTEX_PROJECT_ID="licensecorporation-dev"
+export CLOUD_ML_REGION="us-east5"
+```
+
+## Linux-Specific Notes
+
+For systemd services or cron jobs, ensure environment variables are available:
+```bash
+# /etc/environment (system-wide)
+CLAUDE_CODE_USE_VERTEX="1"
+ANTHROPIC_VERTEX_PROJECT_ID="licensecorporation-dev"
+CLOUD_ML_REGION="us-east5"
+```
