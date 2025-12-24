@@ -15,6 +15,42 @@ from whisperflow.utils.logger import init_logger, get_logger, log_exception
 init_logger()
 logger = get_logger("whisperflow.main")
 
+
+def kill_prior_instances() -> int:
+    """Kill any prior WhisperFlow instances. Returns count of killed processes."""
+    import subprocess
+    killed = 0
+    current_pid = os.getpid()
+
+    try:
+        # Use PowerShell to find and kill python processes with whisperflow in command line
+        ps_script = '''
+        Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
+        Where-Object { $_.CommandLine -like '*whisperflow*' } |
+        Select-Object -ExpandProperty ProcessId
+        '''
+        result = subprocess.run(
+            ['powershell', '-Command', ps_script],
+            capture_output=True, text=True, timeout=10
+        )
+
+        for line in result.stdout.strip().split('\n'):
+            line = line.strip()
+            if line.isdigit():
+                pid = int(line)
+                if pid != current_pid:
+                    try:
+                        subprocess.run(['taskkill', '/F', '/PID', str(pid)],
+                                      capture_output=True, timeout=5)
+                        killed += 1
+                        logger.info(f"Killed prior instance (PID {pid})")
+                    except Exception:
+                        pass
+    except Exception as e:
+        logger.debug(f"Error checking for prior instances: {e}")
+
+    return killed
+
 from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QThread, pyqtSignal
@@ -479,11 +515,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="WhisperFlow - Local speech-to-text")
     parser.add_argument("--test", action="store_true", help="Run self-test")
     parser.add_argument("--log-level", default="DEBUG", help="Log level (DEBUG, INFO, WARNING, ERROR)")
+    parser.add_argument("--no-kill", action="store_true", help="Don't kill prior instances")
     args = parser.parse_args()
 
     if args.test:
         success = run_self_test()
         sys.exit(0 if success else 1)
+
+    # Kill prior instances before starting (prevents duplicates)
+    if not args.no_kill:
+        killed = kill_prior_instances()
+        if killed > 0:
+            logger.info(f"Killed {killed} prior instance(s)")
+            time.sleep(0.5)  # Brief pause to ensure cleanup
 
     try:
         app = WhisperFlowApp()

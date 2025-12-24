@@ -485,7 +485,18 @@ class WhisperFlowWindow(QWidget):
         paste_action.setChecked(config.auto_paste)
         paste_action.triggered.connect(lambda checked: self.toggle_auto_paste_requested.emit(checked))
 
+        menu.addSeparator()
+
+        # Quit option
+        quit_action = menu.addAction("❌ Quit")
+        quit_action.triggered.connect(self._quit_app)
+
         menu.exec(event.globalPos())
+
+    def _quit_app(self) -> None:
+        """Quit the application."""
+        from PyQt6.QtWidgets import QApplication
+        QApplication.quit()
 
     @property
     def current_state(self) -> AppState:
