@@ -101,7 +101,7 @@ The dev-experience repository defines a "safe field of play" where:
 
 ### 5.2 Orchestration Controls
 
-The **lc-repository** (product codebase) implements:
+The **[lc repository](https://github.com/licensecorporation/lc)** (product codebase) implements:
 - Automated testing via CI/CD
 - Code owner approval requirements
 - Pre-commit hooks and linting
