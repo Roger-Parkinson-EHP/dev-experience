@@ -142,6 +142,37 @@ function Install-Symlinks {
         Write-Host "  Created CLAUDE.md with import" -ForegroundColor Green
     }
 
+    # Configure settings.json (no Claude attribution, statusline)
+    Write-Host "`nConfiguring settings..." -ForegroundColor Cyan
+    $settingsPath = "$claudeDir\settings.json"
+    $settings = @{}
+
+    if (Test-Path $settingsPath) {
+        try {
+            $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json -AsHashtable
+        } catch {
+            $settings = @{}
+        }
+    }
+
+    # Ensure no Claude/Anthropic attribution on commits or PRs
+    if (-not $settings.ContainsKey("attribution")) {
+        $settings["attribution"] = @{}
+    }
+    $settings["attribution"]["commit"] = ""
+    $settings["attribution"]["pr"] = ""
+
+    # Configure statusline
+    if (-not $settings.ContainsKey("statusLine")) {
+        $settings["statusLine"] = @{}
+    }
+    $settings["statusLine"]["type"] = "command"
+    $settings["statusLine"]["command"] = "powershell.exe -ExecutionPolicy Bypass -File $claudeDir\statusline.ps1"
+
+    $settings | ConvertTo-Json -Depth 10 | Set-Content $settingsPath -Encoding UTF8
+    Write-Host "  Attribution: disabled (no Claude/Anthropic credit)" -ForegroundColor Green
+    Write-Host "  Status line: configured" -ForegroundColor Green
+
     # Add MCP servers at user scope (idempotent)
     Write-Host "`nConfiguring MCP servers..." -ForegroundColor Cyan
 

@@ -116,6 +116,37 @@ install_symlinks() {
         echo -e "  ${GREEN}Created CLAUDE.md with import${NC}"
     fi
 
+    # Configure settings.json (no Claude attribution, statusline)
+    echo -e "\n${CYAN}Configuring settings...${NC}"
+    SETTINGS_PATH="$CLAUDE_DIR/settings.json"
+
+    # Create or update settings.json
+    if [ -f "$SETTINGS_PATH" ]; then
+        # Use jq if available, otherwise use simple approach
+        if command -v jq >/dev/null 2>&1; then
+            jq '.attribution.commit = "" | .attribution.pr = "" | .statusLine.type = "command" | .statusLine.command = "bash ~/.claude/statusline.sh"' "$SETTINGS_PATH" > "$SETTINGS_PATH.tmp" && mv "$SETTINGS_PATH.tmp" "$SETTINGS_PATH"
+        else
+            # Fallback: just ensure file exists, warn user
+            echo -e "  ${YELLOW}jq not installed - settings may need manual update${NC}"
+        fi
+    else
+        # Create new settings file
+        cat > "$SETTINGS_PATH" << 'SETTINGS_EOF'
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  }
+}
+SETTINGS_EOF
+    fi
+    echo -e "  ${GREEN}Attribution: disabled (no Claude/Anthropic credit)${NC}"
+    echo -e "  ${GREEN}Status line: configured${NC}"
+
     # Add MCP servers at user scope (idempotent)
     echo -e "\n${CYAN}Configuring MCP servers...${NC}"
 
