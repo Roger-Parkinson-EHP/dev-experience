@@ -2,216 +2,109 @@
 
 Developer experience tools for working with Claude Code on compliant infrastructure.
 
-## Purpose
-
-This repo solves three problems:
-
-1. **Onboarding** - Get developers set up with Claude Code + Vertex AI in minutes
-2. **Productivity** - Speech-to-text and conversation search for faster coding
-3. **Continuity** - Never lose context after compaction or across sessions
-
-```mermaid
-flowchart LR
-    subgraph "Developer Experience"
-        A[New Developer] --> B[validate-vertex-setup.ps1]
-        B --> C{Setup Valid?}
-        C -->|Yes| D[Start Coding with Claude]
-        C -->|No| E[Follow Setup Guide]
-        E --> B
-    end
-
-    subgraph "Daily Workflow"
-        D --> F[WhisperFlow: Speak → Code]
-        D --> G[Claude Code: Think → Build]
-        G --> H{Context Full?}
-        H -->|Compact| I[post-compact skill]
-        I --> J[Search History]
-        J --> G
-    end
-```
-
 ## Quick Start
 
-### 1. Validate Your Setup
-
-```powershell
-.\setup\windows\validate-vertex-setup.ps1
-```
-
-```
-SUCCESS: Your setup is configured for FedRAMP-compliant Vertex AI!
-
-You are inferencing from:
-  - Project: licensecorporation-dev
-  - Region: us-east5
-  - Provider: Google Cloud Vertex AI (FedRAMP High)
-```
-
-### 2. Start WhisperFlow
-
-```powershell
-cd whisperflow && pip install -r requirements.txt && python run.py
-```
-
-Press `Ctrl+Shift+Space` → Speak → Text appears at cursor.
-
-### 3. Use Claude Code
+Clone and run setup to provision your Claude Code environment:
 
 ```bash
-claude
+git clone https://github.com/licensecorporation/dev-experience
+cd dev-experience
+
+# Windows (PowerShell as Admin or Developer Mode enabled)
+.\setup.ps1
+
+# macOS / Linux
+chmod +x setup.sh && ./setup.sh
 ```
 
-Skills are automatically available:
-- **search-history** - Find past discussions
-- **post-compact** - Recover context after compaction
+This creates symlinks from `~/.claude/` to this repository, so:
+- **Skills** are automatically available (`/search-history`, `/post-compact`)
+- **Services** (conversation search) are accessible from any repo
+- **MCP servers** for Gemini are configured
+- **Updates apply instantly** with `git pull`
 
-## Architecture
+## What Gets Configured
 
-```mermaid
-flowchart TB
-    subgraph "Your Machine"
-        CC[Claude Code CLI]
-        WF[WhisperFlow]
-        SK[Skills]
-        CS[conversation-search.py]
-    end
-
-    subgraph "Google Cloud (FedRAMP High)"
-        VA[Vertex AI]
-        CL[Cloud Logging]
-    end
-
-    subgraph "Local Storage"
-        JL[JSONL Transcripts]
-        CF[~/.whisperflow/config.json]
-    end
-
-    CC <-->|API Calls| VA
-    VA --> CL
-    CC --> JL
-    WF --> CC
-    SK --> CS
-    CS --> JL
-    WF --> CF
-```
-
-## How Context Recovery Works
-
-When context gets compacted, Claude doesn't just read the summary - it recovers full context:
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant C as Claude
-    participant S as Search Tool
-    participant H as History (JSONL)
-
-    Note over C: Context compacted
-    C->>C: See compaction summary
-    C->>S: Search recent history
-    S->>H: Query JSONL files
-    H-->>S: Return matches
-    S-->>C: Full context
-    C->>U: Continue with understanding
-```
-
-**Result**: Within 3-5 tool uses, Claude is fully up to speed on:
-- What was being worked on
-- Decisions that were made
-- Files that were modified
-- Problems that remain open
+| Your ~/.claude/ | Linked to | Purpose |
+|-----------------|-----------|---------|
+| `services/` | `claude-code/agentic-tools/` | Conversation search tool |
+| `skills/` | `claude-code/skills/` | post-compact, search-history |
+| `statusline.ps1` or `.sh` | `claude-code/statusline/` | Custom status line |
+| `CLAUDE.md` | Imports shared instructions | Startup guidance |
 
 ## Components
 
-| Component | Purpose | Usage |
-|-----------|---------|-------|
-| `validate-vertex-setup.ps1` | Confirm FedRAMP/PCI/DoD compliance | Run once after setup |
-| `whisperflow/` | Speech-to-text service | `Ctrl+Shift+Space` to toggle |
-| `conversation-search.py` | Search JSONL history | `python conversation-search.py "term"` |
-| `skills/search-history/` | Claude auto-searches past | Automatic |
-| `skills/post-compact/` | Recover context after compact | Automatic |
+| Folder | Purpose |
+|--------|---------|
+| [claude-code/](claude-code/) | Claude Code skills, tools, and configuration |
+| [speech-to-text/](speech-to-text/) | WhisperFlow dictation service |
+
+## How It Works
+
+```
+~/.claude/                          This Repository
+├── services/ ──── symlink ────►    claude-code/agentic-tools/
+├── skills/ ────── symlink ────►    claude-code/skills/
+└── CLAUDE.md ──── imports ────►    claude-code/agentic-tools/CLAUDE.md
+
+After setup:
+- Open any repo with Claude Code
+- Skills work automatically
+- `git pull` in dev-experience updates everyone instantly
+```
 
 ## Compliance
 
-Infrastructure handles compliance - you just code:
+All AI inference goes through FedRAMP-authorized infrastructure:
 
-```mermaid
-flowchart LR
-    subgraph "Your Code"
-        A[Write Code]
-    end
-
-    subgraph "Vertex AI Infrastructure"
-        B[FedRAMP High]
-        C[PCI-DSS]
-        D[DoD IL4/IL5]
-        E[SOC 2 Type II]
-    end
-
-    subgraph "Guarantees"
-        F[No Training on Data]
-        G[Full Audit Logging]
-        H[Your Own GCP Project]
-    end
-
-    A --> B & C & D & E
-    B & C & D & E --> F & G & H
-```
-
-| Framework | Status |
-|-----------|--------|
-| FedRAMP High | Authorized |
+| Standard | Status |
+|----------|--------|
+| FedRAMP High | Authorized (us-east5) |
 | PCI-DSS | Compliant |
 | DoD IL4/IL5 | Eligible (us-east5) |
-| SOC 2 Type II | Compliant |
 | Data used for training | **Never** |
 
-## Directory Structure
+## Available Skills
 
-```
-dev-experience/
-├── setup/
-│   └── windows/
-│       └── validate-vertex-setup.ps1    # Validate compliance
-├── whisperflow/                          # Speech-to-text
-│   ├── main.py
-│   ├── transcriber.py                   # Whisper integration
-│   └── utils/config.py                  # Custom vocabulary
-├── services/
-│   ├── conversation-search.py           # Search JSONL
-│   └── config.py                        # Auto-discovery
-├── skills/
-│   ├── search-history/                  # Find past discussions
-│   │   └── SKILL.md
-│   └── post-compact/                    # Context recovery
-│       └── SKILL.md
-└── docs/
-    └── claude-code-vertex-setup.md      # Full setup guide
-```
+After setup, these skills are available in Claude Code:
 
-## Custom Vocabulary
+- **`/search-history`** - Search past conversations for context
+- **`/post-compact`** - Recover full context after compaction
 
-WhisperFlow recognizes technical terms via `~/.whisperflow/config.json`:
+## MCP Servers Configured
 
-```json
-{
-  "custom_vocabulary": "Claude Code, FedRAMP, PCI-DSS, Vertex AI, Bazel, ..."
-}
+| Server | Model | Region | Use |
+|--------|-------|--------|-----|
+| `gemini-25-pro-fedramp` | Gemini 2.5 Pro | us-east5 | FedRAMP-compliant |
+| `gemini-3-pro-global` | Gemini 3 Pro Preview | global | Advanced reasoning |
+| `gemini-3-flash-global` | Gemini 3 Flash Preview | global | Fast tasks |
+
+## Updating
+
+Pull latest and the symlinks automatically use new content:
+
+```bash
+cd ~/Documents/GitHub/dev-experience
+git pull
 ```
 
-Add your project-specific terms for better transcription.
+## Uninstalling
 
-## Contributing
+Remove symlinks and restore standalone Claude Code:
 
-1. Clone the repo
-2. Run validation script
-3. Test WhisperFlow
-4. Test search-history skill
-5. Submit PRs for improvements
+```bash
+# Windows
+.\setup.ps1 -Uninstall
 
-## Full Setup Guide
+# macOS / Linux
+./setup.sh uninstall
+```
 
-See [docs/claude-code-vertex-setup.md](docs/claude-code-vertex-setup.md) for complete installation.
+## Full Documentation
+
+- [Claude Code Setup](claude-code/README.md)
+- [Vertex AI Configuration](claude-code/vertex-ai-model-garden/README.md)
+- [AI Policy v2](AI-POLICY-v2.md)
 
 ## License
 

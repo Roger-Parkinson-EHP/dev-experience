@@ -7,7 +7,7 @@ Developer experience tools for Claude Code on compliant infrastructure.
 **ALWAYS search recent history at the start of a conversation** to recover context from previous sessions:
 
 ```bash
-cd C:/Users/Roger/Documents/GitHub/dev-experience/services
+cd ~/.claude/services
 python conversation-search.py --list-sessions | head -5
 python conversation-search.py "." --max 5 --full
 ```
@@ -23,15 +23,15 @@ Do this BEFORE responding to the user's first request. It takes 2-3 tool calls a
 
 | Component | Purpose |
 |-----------|---------|
-| `skills/post-compact/` | Context recovery after compaction |
-| `skills/search-history/` | Search JSONL history |
-| `services/conversation-search.py` | The actual search tool |
-| `whisperflow/` | Speech-to-text service |
+| `claude-code/skills/post-compact/` | Context recovery after compaction |
+| `claude-code/skills/search-history/` | Search JSONL history |
+| `claude-code/agentic-tools/conversation-search.py` | The actual search tool |
+| `speech-to-text/whisperflow/` | Speech-to-text service |
 
 ## Search Tool
 
 ```bash
-cd C:/Users/Roger/Documents/GitHub/dev-experience/services
+cd ~/.claude/services
 python conversation-search.py "search term"           # Basic search
 python conversation-search.py --list-sessions         # List all sessions
 python conversation-search.py "topic" --max 5 --full  # Full context

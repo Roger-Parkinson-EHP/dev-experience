@@ -19,7 +19,7 @@ Use this skill when you see ANY of these signals:
 
 1. **Search recent history** for the current session:
 ```bash
-cd C:/Users/Roger/Documents/GitHub/dev-experience/services
+cd ~/.claude/services
 python conversation-search.py --list-sessions | head -5
 ```
 

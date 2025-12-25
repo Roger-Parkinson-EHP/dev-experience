@@ -17,10 +17,10 @@ Search through Claude Code conversation history to find relevant past discussion
 
 ## How to Search
 
-Run the search script from the platform services directory:
+Run the search script from the services directory:
 
 ```bash
-cd C:/Users/Roger/Documents/GitHub/dev-experience/services
+cd ~/.claude/services
 python conversation-search.py "search term"
 ```
 
