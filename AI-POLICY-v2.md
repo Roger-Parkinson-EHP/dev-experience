@@ -117,34 +117,103 @@ Changes to compliance-critical files require approval from designated Code Owner
 
 ---
 
-## 6. Responsibilities
+## 6. Training and Enablement
 
-### 6.1 Personnel
+### 6.1 Developer Onboarding
+
+All new developers must complete AI tooling setup as part of onboarding:
+
+1. Clone dev-experience repository
+2. Run setup script (`setup.ps1` or `setup.sh`)
+3. Validate configuration passes all checks
+4. Complete hands-on training session
+
+### 6.2 Ongoing Training
+
+Regular training ensures developers maximize productivity with approved tools:
+
+| Cadence | Focus | Format |
+|---------|-------|--------|
+| Weekly | Tips, new features, Q&A | Team standup or Slack |
+| Monthly | Deep dives, advanced usage | Hands-on workshop |
+| As needed | New tool rollouts | Documentation + demo |
+
+### 6.3 Training Topics
+
+- Claude Code effective prompting and context management
+- Using MCP servers (Gemini, Playwright, etc.)
+- Conversation history search and context recovery
+- Skills usage (`/search-history`, `/post-compact`)
+- Security best practices within the tooling
+
+---
+
+## 7. CI/CD Integration
+
+### 7.1 Pull Request Requirements
+
+All pull requests in the **lc** repository must:
+
+1. Pass automated tests (unit, integration, e2e)
+2. Pass security scanning
+3. Receive Code Owner approval for protected paths
+4. Meet code coverage thresholds
+
+AI-assisted code receives the same scrutiny as manually-written code. The tooling ensures compliance; the review process ensures quality.
+
+### 7.2 Deployment Pipeline
+
+The deployment process integrates with compliant AI tooling:
+
+```
+Developer → Claude Code → PR → CI/CD → Code Review → Merge → Deploy
+    ↑                                      ↑
+    └── dev-experience setup              └── Code Owner approval
+```
+
+### 7.3 Automated Checks
+
+| Check | Stage | Purpose |
+|-------|-------|---------|
+| Linting | Pre-commit | Code style enforcement |
+| Type checking | CI | Catch type errors |
+| Security scan | CI | Vulnerability detection |
+| Test suite | CI | Functional verification |
+| Code Owner approval | PR | Human oversight for critical paths |
+
+---
+
+## 8. Responsibilities
+
+### 8.1 Personnel
 
 - Use only tools documented in dev-experience repo
 - Run validation scripts before starting work
 - Report any compliance concerns to security team
 - Keep local environment configured per specifications
+- Attend scheduled training sessions
 
-### 6.2 Code Owners
+### 8.2 Code Owners
 
 - Review and approve changes to policy documents
 - Evaluate new tools for compliance
 - Maintain dev-experience repository
 - Conduct periodic audits
+- Lead training sessions
 
-### 6.3 Platform Team
+### 8.3 Platform Team
 
 - Maintain GCP/Vertex AI infrastructure
 - Monitor Cloud Logging for anomalies
 - Manage IAM and access controls
 - Update validation scripts
+- Support CI/CD pipeline integration
 
 ---
 
-## 7. Setup and Validation
+## 9. Setup and Validation
 
-### 7.1 Initial Setup (One-Time)
+### 9.1 Initial Setup (One-Time)
 
 Personnel must run the setup script to provision their Claude Code environment:
 
@@ -166,7 +235,7 @@ This creates symlinks from `~/.claude/` to the dev-experience repository, ensuri
 - **Updates apply instantly** via `git pull`
 - **No Claude/Anthropic attribution** on commits or PRs
 
-### 7.2 Validation
+### 9.2 Validation
 
 After setup, validate the configuration:
 
@@ -182,9 +251,9 @@ Expected result: All checks pass, confirming FedRAMP-compliant configuration.
 
 ---
 
-## 8. Audit and Monitoring
+## 10. Audit and Monitoring
 
-### 8.1 Cloud Logging
+### 10.1 Cloud Logging
 
 All AI API calls are logged in GCP Cloud Logging:
 - Timestamp
@@ -193,7 +262,7 @@ All AI API calls are logged in GCP Cloud Logging:
 - Region
 - Request/response metadata
 
-### 8.2 Periodic Review
+### 10.2 Periodic Review
 
 Code Owners will conduct quarterly reviews of:
 - Tool usage patterns
@@ -203,7 +272,7 @@ Code Owners will conduct quarterly reviews of:
 
 ---
 
-## 9. Changes from v1.0
+## 11. Changes from v1.0
 
 | v1.0 Restriction | v2.0 Approach |
 |-----------------|---------------|
@@ -215,7 +284,7 @@ Code Owners will conduct quarterly reviews of:
 
 ---
 
-## 10. Amendments
+## 12. Amendments
 
 This policy is maintained in the dev-experience repository. Changes require:
 1. Pull request with justification
@@ -225,7 +294,7 @@ This policy is maintained in the dev-experience repository. Changes require:
 
 ---
 
-## 11. Acknowledgment
+## 13. Acknowledgment
 
 By using License Corporation development tools and repositories, Personnel acknowledge:
 - They have read and understand this policy
