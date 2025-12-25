@@ -142,18 +142,40 @@ Changes to compliance-critical files require approval from designated Code Owner
 
 ---
 
-## 7. Validation
+## 7. Setup and Validation
 
-Personnel must validate their setup before development:
+### 7.1 Initial Setup (One-Time)
+
+Personnel must run the setup script to provision their Claude Code environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/licensecorporation/dev-experience
+cd dev-experience
+
+# Windows (PowerShell as Admin or Developer Mode enabled)
+.\setup.ps1
+
+# macOS/Linux
+chmod +x setup.sh && ./setup.sh
+```
+
+This creates symlinks from `~/.claude/` to the dev-experience repository, ensuring:
+- **Skills** are automatically available
+- **MCP servers** for Gemini are configured
+- **Updates apply instantly** via `git pull`
+- **No Claude/Anthropic attribution** on commits or PRs
+
+### 7.2 Validation
+
+After setup, validate the configuration:
 
 ```bash
 # Windows
-cd dev-experience/claude-code/vertex-ai-model-garden/windows
-.\validate-vertex-setup.ps1
+.\claude-code\vertex-ai-model-garden\windows\validate-vertex-setup.ps1
 
 # macOS/Linux
-cd dev-experience/claude-code/vertex-ai-model-garden/unix
-./validate-vertex-setup.sh
+./claude-code/vertex-ai-model-garden/unix/validate-vertex-setup.sh
 ```
 
 Expected result: All checks pass, confirming FedRAMP-compliant configuration.
