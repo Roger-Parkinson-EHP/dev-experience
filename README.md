@@ -1,111 +1,121 @@
 # dev-experience
 
-Developer experience tools for working with Claude Code on compliant infrastructure.
+**The developer toolkit for License Corporation.**
+
+This repository is the single source of truth for AI-assisted development tools. Clone it, run setup, and you're ready to build.
+
+## Why This Exists
+
+We use AI tools (Claude Code, Gemini CLI) to accelerate development while maintaining FedRAMP compliance. This repo:
+
+- **Provisions your environment** with one command
+- **Keeps everyone in sync** via symlinks (pull once, update everywhere)
+- **Enforces compliance by design** (you can't accidentally use non-compliant tools)
+- **Accumulates best practices** as we learn what works
+
+Changes happen via PR. Everyone participates. This is a living document.
+
+---
 
 ## Quick Start
-
-Clone and run setup to provision your Claude Code environment:
 
 ```bash
 git clone https://github.com/licensecorporation/dev-experience
 cd dev-experience
 
-# Windows (PowerShell as Admin or Developer Mode enabled)
+# Windows (PowerShell - requires Developer Mode or Admin)
 .\setup.ps1
 
 # macOS / Linux
 chmod +x setup.sh && ./setup.sh
 ```
 
-This creates symlinks from `~/.claude/` to this repository, so:
-- **Skills** are automatically available (`/search-history`, `/post-compact`)
-- **Services** (conversation search) are accessible from any repo
-- **MCP servers** for Gemini are configured
-- **Updates apply instantly** with `git pull`
+**Daily authentication** (run once per day):
+```bash
+gcloud auth application-default login
+gcloud auth application-default set-quota-project licensecorporation-dev
+```
 
-## What Gets Configured
+Then just run `claude` or `gemini` from any terminal.
 
-| Your ~/.claude/ | Linked to | Purpose |
-|-----------------|-----------|---------|
-| `services/` | `claude-code/agentic-tools/` | Conversation search tool |
-| `skills/` | `claude-code/skills/` | post-compact, search-history |
-| `statusline.ps1` or `.sh` | `claude-code/statusline/` | Custom status line |
-| `CLAUDE.md` | Imports shared instructions | Startup guidance |
+---
 
-## Components
+## What's Here
 
 | Folder | Purpose |
 |--------|---------|
-| [claude-code/](claude-code/) | Claude Code skills, tools, and configuration |
-| [speech-to-text/](speech-to-text/) | WhisperFlow dictation service |
+| [claude-code/](claude-code/) | Claude Code skills, tools, status line |
+| [gemini-cli/](gemini-cli/) | Gemini CLI configuration |
+| [vertex-ai-model-garden/](vertex-ai-model-garden/) | Models enabled in our FedRAMP data center |
+| [speech-to-text/](speech-to-text/) | WhisperFlow dictation (Ctrl+Shift+Space) |
 
-## How It Works
+---
 
-```
-~/.claude/                          This Repository
-├── services/ ──── symlink ────►    claude-code/agentic-tools/
-├── skills/ ────── symlink ────►    claude-code/skills/
-└── CLAUDE.md ──── imports ────►    claude-code/agentic-tools/CLAUDE.md
+## What Setup Does
+
+Creates symlinks from `~/.claude/` to this repo:
+
+| Your ~/.claude/ | Points to | Purpose |
+|-----------------|-----------|---------|
+| `services/` | `claude-code/agentic-tools/` | Conversation search |
+| `skills/` | `claude-code/skills/` | Context recovery skills |
+| `statusline.ps1` | `claude-code/statusline/` | Rich status line |
 
 After setup:
-- Open any repo with Claude Code
-- Skills work automatically
-- `git pull` in dev-experience updates everyone instantly
-```
+- Skills work in any repo
+- `git pull` here updates everyone instantly
+- No per-project configuration needed
+
+---
+
+## Models Available
+
+See [vertex-ai-model-garden/](vertex-ai-model-garden/) for full details.
+
+| Model | Region | Use Case |
+|-------|--------|----------|
+| **Claude Opus 4.5** | us-east5 | Complex reasoning, architecture |
+| **Claude Sonnet 4.5** | us-east5 | Daily development |
+| **Claude Haiku 4.5** | us-east5 | Fast tasks, agents |
+| Gemini 2.5 Pro/Flash | us-east5 | FedRAMP alternative |
+| Gemini 3 Pro/Flash | global | Preview (not FedRAMP) |
+
+---
 
 ## Compliance
 
-All AI inference goes through FedRAMP-authorized infrastructure:
+All AI inference through Vertex AI:
 
-| Standard | Status |
-|----------|--------|
-| FedRAMP High | Authorized (us-east5) |
-| PCI-DSS | Compliant |
-| DoD IL4/IL5 | Eligible (us-east5) |
-| Data used for training | **Never** |
+| Guarantee | Status |
+|-----------|--------|
+| FedRAMP High | ✅ us-east5 region |
+| DoD IL4/IL5 | ✅ us-east5 region |
+| PCI-DSS | ✅ GCP certified |
+| Data used for training | **Never** (Google Terms §17) |
 
-## Available Skills
+---
 
-After setup, these skills are available in Claude Code:
+## Documentation
 
-- **`/search-history`** - Search past conversations for context
-- **`/post-compact`** - Recover full context after compaction
+| Document | Purpose |
+|----------|---------|
+| [AI-POLICY-v2.md](AI-POLICY-v2.md) | Official AI development policy |
+| [claude-code/README.md](claude-code/README.md) | Claude Code setup and tools |
+| [gemini-cli/README.md](gemini-cli/README.md) | Gemini CLI setup |
+| [vertex-ai-model-garden/README.md](vertex-ai-model-garden/README.md) | What's enabled, how to authenticate |
 
-## MCP Servers Configured
+---
 
-| Server | Model | Region | Use |
-|--------|-------|--------|-----|
-| `gemini-25-pro-fedramp` | Gemini 2.5 Pro | us-east5 | FedRAMP-compliant |
-| `gemini-3-pro-global` | Gemini 3 Pro Preview | global | Advanced reasoning |
-| `gemini-3-flash-global` | Gemini 3 Flash Preview | global | Fast tasks |
+## Contributing
 
-## Updating
+1. Create a branch
+2. Make your changes
+3. Open a PR
 
-Pull latest and the symlinks automatically use new content:
+CODEOWNERS require approval for critical paths. See [.github/CODEOWNERS](.github/CODEOWNERS).
 
-```bash
-cd ~/Documents/GitHub/dev-experience
-git pull
-```
+---
 
-## Uninstalling
+## Questions?
 
-Remove symlinks and restore standalone Claude Code:
-
-```bash
-# Windows
-.\setup.ps1 -Uninstall
-
-# macOS / Linux
-./setup.sh uninstall
-```
-
-## Full Documentation
-
-- [Claude Code Setup](claude-code/README.md)
-- [Vertex AI Configuration](claude-code/vertex-ai-model-garden/README.md)
-- [AI Policy v2](AI-POLICY-v2.md)
-
-## License
-
-MIT
+Ask in Slack or open an issue. This repo is meant to evolve with our needs.

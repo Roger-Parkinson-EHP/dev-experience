@@ -41,7 +41,7 @@ gcloud auth application-default login
 gcloud auth application-default set-quota-project licensecorporation-dev
 
 # Validate
-.\windows\validate-vertex-setup.ps1
+.\validate-vertex-setup.ps1
 ```
 
 ### macOS / Linux
@@ -58,8 +58,8 @@ gcloud auth application-default login
 gcloud auth application-default set-quota-project licensecorporation-dev
 
 # Validate
-chmod +x unix/validate-vertex-setup.sh
-./unix/validate-vertex-setup.sh
+chmod +x validate-vertex-setup.sh
+./validate-vertex-setup.sh
 ```
 
 ## How It Works
@@ -115,7 +115,7 @@ Any terminal that has access to your ADC can use these models. This works in:
 
 ## Validation Scripts
 
-- `windows/validate-vertex-setup.ps1` - Windows validation
-- `unix/validate-vertex-setup.sh` - macOS/Linux validation
+- `validate-vertex-setup.ps1` - Windows (PowerShell)
+- `validate-vertex-setup.sh` - macOS/Linux (Shell)
 
 Run these to confirm your setup is correct before starting work.

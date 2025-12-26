@@ -1,0 +1,27 @@
+# Code Owners for dev-experience repository
+# Changes to these paths require approval from designated owners
+
+# Default owners for everything
+* @roger-parkinson
+
+# AI Policy - requires leadership approval
+AI-POLICY*.md @jonathan @mark @victor @roger-parkinson
+
+# Vertex AI Model Garden - what's enabled in our FedRAMP data center
+vertex-ai-model-garden/ @jonathan @roger-parkinson
+
+# Claude Code configuration and tools
+claude-code/ @roger-parkinson @arnur
+
+# Gemini CLI configuration
+gemini-cli/ @roger-parkinson @arnur
+
+# Speech-to-text (WhisperFlow)
+speech-to-text/ @roger-parkinson
+
+# Root setup scripts
+setup.ps1 @roger-parkinson @arnur
+setup.sh @roger-parkinson @arnur
+
+# Main documentation
+README.md @roger-parkinson
