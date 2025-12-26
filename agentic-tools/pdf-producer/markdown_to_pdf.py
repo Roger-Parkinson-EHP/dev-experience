@@ -25,26 +25,54 @@ import sys
 import re
 from pathlib import Path
 
-__version__ = "3.1.0"
+__version__ = "3.2.0"
 __project__ = "LicenseCorp"
 
 # ============================================================
 # BRAND CONFIGURATION
 # ============================================================
 
-LC_BRAND = {
-    "logo_url": "https://storage.googleapis.com/a4ee1cbc43b25bc8-public-website-prod/LC_Logo_Black.png",
-    "company_name": "License Corporation",
-    "colors": {
-        "primary_orange": "#ef6820",
-        "primary_purple": "#7839ee",
-        "charcoal": "#1e1a1c",
-        "accent_green": "#26da42",
-        "accent_blue": "#4440ff",
+BRANDS = {
+    "lc": {
+        "name": "License Corporation",
+        "short_name": "LC",
+        "logo_url": "https://storage.googleapis.com/a4ee1cbc43b25bc8-public-website-prod/LC_Logo_Black.png",
+        "colors": {
+            "primary": "#ef6820",  # Orange
+            "secondary": "#7839ee",  # Purple
+            "text": "#1e1a1c",  # Charcoal
+        },
+        "confidential_text": "License Corporation - Confidential",
+        "footer_text": "License Corporation | Proprietary & Confidential",
     },
-    "confidential_text": "License Corporation - Confidential",
-    "footer_text": "License Corporation | Proprietary & Confidential",
+    "la": {
+        "name": "License Authority",
+        "short_name": "LA",
+        "logo_url": "https://storage.googleapis.com/a4ee1cbc43b25bc8-public-website-prod/License_Authority_Logo_White_Background.png",
+        "colors": {
+            "primary": "#7839ee",  # Purple
+            "secondary": "#ef6820",  # Orange
+            "text": "#1e1a1c",  # Charcoal
+        },
+        "confidential_text": "License Authority - Confidential",
+        "footer_text": "License Authority | Proprietary & Confidential",
+    },
+    "lr": {
+        "name": "License Regulator",
+        "short_name": "LR",
+        "logo_url": "https://storage.googleapis.com/a4ee1cbc43b25bc8-public-website-prod/LC_Logo_Black.png",  # TODO: Add LR logo when available
+        "colors": {
+            "primary": "#4440ff",  # Blue
+            "secondary": "#ef6820",  # Orange
+            "text": "#1e1a1c",  # Charcoal
+        },
+        "confidential_text": "License Regulator - Confidential",
+        "footer_text": "License Regulator | Proprietary & Confidential",
+    },
 }
+
+# Default brand
+DEFAULT_BRAND = "lc"
 
 # ============================================================
 # PREPROCESSING: TOC and Numbering
@@ -165,11 +193,13 @@ def insert_toc(content, toc_markdown):
 class LCMarkdownConverter:
     """Consolidated markdown-to-PDF converter with legal document support"""
 
-    def __init__(self, style="modern", theme="light", branded=False, confidential=True):
+    def __init__(self, style="modern", theme="light", branded=False, confidential=True, brand="lc"):
         self.style = style  # "modern" or "legal"
         self.theme = theme  # "light" or "dark"
-        self.branded = branded  # Add LC branding (header/footer)
+        self.branded = branded  # Add branding (header/footer)
         self.confidential = confidential  # Mark as confidential
+        self.brand_key = brand  # "lc", "la", or "lr"
+        self.brand = BRANDS.get(brand, BRANDS[DEFAULT_BRAND])
         self.mermaid_diagrams_found = 0
 
     def _get_header_template(self, title=""):
@@ -178,11 +208,11 @@ class LCMarkdownConverter:
             return ""
 
         return f"""
-        <div style="width: 100%; font-size: 9px; padding: 5px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid {LC_BRAND['colors']['primary_orange']}; margin-bottom: 10px;">
+        <div style="width: 100%; font-size: 9px; padding: 5px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid {self.brand['colors']['primary']}; margin-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="{LC_BRAND['logo_url']}" style="height: 24px; width: auto;" />
+                <img src="{self.brand['logo_url']}" style="height: 24px; width: auto;" />
             </div>
-            <div style="color: {LC_BRAND['colors']['charcoal']}; font-family: 'Inter', -apple-system, sans-serif;">
+            <div style="color: {self.brand['colors']['text']}; font-family: 'Inter', -apple-system, sans-serif;">
                 {title}
             </div>
         </div>
@@ -193,13 +223,13 @@ class LCMarkdownConverter:
         if not self.branded:
             return ""
 
-        conf_text = LC_BRAND['confidential_text'] if self.confidential else LC_BRAND['company_name']
+        conf_text = self.brand['confidential_text'] if self.confidential else self.brand['name']
 
         return f"""
         <div style="width: 100%; font-size: 8px; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e0e0e0; color: #666; font-family: 'Inter', -apple-system, sans-serif;">
             <div>{conf_text}</div>
             <div>Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
-            <div style="color: {LC_BRAND['colors']['primary_orange']};">Generated <span class="date"></span></div>
+            <div style="color: {self.brand['colors']['primary']};">Generated <span class="date"></span></div>
         </div>
         """
 
@@ -608,7 +638,7 @@ hr {{ background-color: {c['border']}; border: 0; height: 0.25em; margin: 20px 0
         print(f"📍 Location: {markdown_path.parent}")
         print(f"🎨 Style: {self.style} | Theme: {self.theme}")
         if self.branded:
-            print(f"🏢 Branding: License Corporation | Confidential: {self.confidential}")
+            print(f"🏢 Brand: {self.brand['name']} | Confidential: {self.confidential}")
 
         # Read markdown
         content = markdown_path.read_text(encoding='utf-8')
@@ -653,8 +683,14 @@ Examples:
   # Legal document with TOC and numbering
   python markdown_to_pdf.py contract.md --style legal --toc --numbered
 
-  # Official branded document (LC header/footer)
+  # Official License Corporation branded document
   python markdown_to_pdf.py proposal.md --branded --style legal --toc
+
+  # License Authority branded document
+  python markdown_to_pdf.py la-proposal.md --branded --brand la --style legal --toc
+
+  # License Regulator branded document
+  python markdown_to_pdf.py lr-report.md --branded --brand lr --toc
 
   # Branded but not confidential
   python markdown_to_pdf.py public-doc.md --branded --no-confidential
@@ -673,7 +709,9 @@ Examples:
     parser.add_argument('--toc', action='store_true', help='Auto-generate table of contents')
     parser.add_argument('--numbered', action='store_true', help='Add section numbering (1.1, 1.2.1)')
     parser.add_argument('--branded', action='store_true',
-                        help='Add LC branding: logo header, confidential footer, page numbers')
+                        help='Add branding: logo header, confidential footer, page numbers')
+    parser.add_argument('--brand', choices=['lc', 'la', 'lr'], default='lc',
+                        help='Brand: lc (License Corporation), la (License Authority), lr (License Regulator)')
     parser.add_argument('--no-confidential', action='store_true',
                         help='Remove "Confidential" from footer (use with --branded)')
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}')
@@ -689,7 +727,8 @@ Examples:
         style=args.style,
         theme=args.theme,
         branded=args.branded,
-        confidential=not args.no_confidential
+        confidential=not args.no_confidential,
+        brand=args.brand
     )
 
     try:

@@ -2,7 +2,7 @@
 
 LicenseCorp Markdown to PDF Converter - Professional document generation with legal and modern styling, plus official LC branding.
 
-**Version 3.1.0** - Now with branded header/footer support for official documents.
+**Version 3.2.0** - Multi-brand support: License Corporation, License Authority, License Regulator.
 
 ## Features
 
@@ -33,7 +33,10 @@ python markdown_to_pdf.py README.md --theme dark --output report.pdf
 
 | Flag | Effect |
 |------|--------|
-| `--branded` | **Add LC branding** - logo, footer, page numbers |
+| `--branded` | **Add branding** - logo, footer, page numbers |
+| `--brand lc` | License Corporation (default, orange accent) |
+| `--brand la` | License Authority (purple accent) |
+| `--brand lr` | License Regulator (blue accent) |
 | `--no-confidential` | Remove "Confidential" from footer |
 | `--style legal` | Times New Roman, justified, Letter size |
 | `--style modern` | VS Code styling (default) |
@@ -44,24 +47,37 @@ python markdown_to_pdf.py README.md --theme dark --output report.pdf
 
 ## Branded Documents
 
-The `--branded` flag adds official License Corporation branding:
+The `--branded` flag adds official branding with logo header and confidential footer.
+
+### Available Brands
+
+| Brand | Flag | Accent Color | Logo |
+|-------|------|--------------|------|
+| **License Corporation** | `--brand lc` (default) | Orange `#ef6820` | LC_Logo_Black.png |
+| **License Authority** | `--brand la` | Purple `#7839ee` | License_Authority_Logo.png |
+| **License Regulator** | `--brand lr` | Blue `#4440ff` | (uses LC logo) |
+
+### What Branding Adds
 
 **Header:**
-- LC logo (left)
+- Brand logo (left)
 - Document title (right)
-- Orange accent border
+- Accent color border
 
 **Footer:**
-- "License Corporation - Confidential" (or just company name with `--no-confidential`)
+- "[Brand Name] - Confidential" (or just company name with `--no-confidential`)
 - Page numbers (Page X of Y)
-- Generation date
+- Generation date in accent color
 
 ```bash
-# Official proposal
+# License Corporation proposal
 python markdown_to_pdf.py proposal.md --branded --style legal --toc
 
-# Contract with full formatting
-python markdown_to_pdf.py contract.md --branded --style legal --toc --numbered
+# License Authority document
+python markdown_to_pdf.py la-doc.md --branded --brand la --style legal --toc
+
+# License Regulator report
+python markdown_to_pdf.py lr-report.md --branded --brand lr --toc
 
 # Public document (no "Confidential")
 python markdown_to_pdf.py whitepaper.md --branded --no-confidential --toc
