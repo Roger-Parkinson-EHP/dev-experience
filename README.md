@@ -151,7 +151,7 @@ By using this repository, you agree to:
 2. **Your employment/contractor agreement** with License Corporation
 3. **Confidentiality obligations** per your signed agreements
 
-See [ONBOARDING.md](ONBOARDING.md) for full orientation.
+See [ONBOARDING.md](ONBOARDING.md) for full orientation and [ACCESS-CONTROL.md](ACCESS-CONTROL.md) for team/role permissions.
 
 ---
 

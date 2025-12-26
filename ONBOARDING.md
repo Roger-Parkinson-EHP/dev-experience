@@ -63,14 +63,14 @@ Request `roles/aiplatform.user` on `licensecorporation-dev` from your admin.
 ### 2. Clone and Setup
 
 ```bash
-git clone https://github.com/licensecorporation/dev-experience
+git clone git@github.com:licensecorporation/dev-experience.git
 cd dev-experience
 
-# Windows
-.\setup.ps1
+# Windows (run PowerShell as Administrator)
+.\setup\setup.ps1
 
 # macOS/Linux
-chmod +x setup.sh && ./setup.sh
+chmod +x setup/setup.sh && ./setup/setup.sh
 ```
 
 ### 3. Authenticate (Daily)
