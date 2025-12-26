@@ -1,121 +1,135 @@
 # dev-experience
 
-**The developer toolkit for License Corporation.**
+**License Corporation Developer Experience**
 
-This repository is the single source of truth for AI-assisted development tools. Clone it, run setup, and you're ready to build.
+The tools, policies, and infrastructure that enable AI-assisted development while protecting intellectual property.
 
-## Why This Exists
+---
 
-We use AI tools (Claude Code, Gemini CLI) to accelerate development while maintaining FedRAMP compliance. This repo:
+## What This Is
 
-- **Provisions your environment** with one command
-- **Keeps everyone in sync** via symlinks (pull once, update everywhere)
-- **Enforces compliance by design** (you can't accidentally use non-compliant tools)
-- **Accumulates best practices** as we learn what works
+This repository provisions developers with compliant AI tools. Clone it, run setup, authenticate, and you're ready to build.
 
-Changes happen via PR. Everyone participates. This is a living document.
+**Key principle**: All AI inference happens via FedRAMP-authorized infrastructure. Your code never trains models. IP is protected by design.
+
+---
+
+## Structure
+
+```
+dev-experience/
+├── agentic-tools/           # AI-powered development tools
+│   ├── claude-code/         # Claude Code (primary tool)
+│   ├── gemini-cli/          # Gemini CLI (alternative)
+│   └── speech-to-text/      # WhisperFlow dictation
+│
+├── fedramp-vertex-ai-model-garden/  # What's enabled in us-east5
+│   ├── README.md                    # Models, auth, compliance
+│   ├── validate-vertex-setup.ps1    # Windows validation
+│   └── validate-vertex-setup.sh     # Unix validation
+│
+├── legal/                   # Policies and agreements
+│   ├── AI-POLICY-v2.md      # Current AI development policy
+│   └── 250813...AI Policy.* # Legacy policy (superseded)
+│
+├── setup/                   # Environment provisioning
+│   ├── setup.ps1            # Windows setup
+│   └── setup.sh             # macOS/Linux setup
+│
+├── ONBOARDING.md            # New developer orientation
+├── CLAUDE.md                # Claude Code project instructions
+└── LICENSE                  # Proprietary - License Corporation
+```
 
 ---
 
 ## Quick Start
 
+### 1. Clone
+
 ```bash
 git clone https://github.com/licensecorporation/dev-experience
 cd dev-experience
-
-# Windows (PowerShell - requires Developer Mode or Admin)
-.\setup.ps1
-
-# macOS / Linux
-chmod +x setup.sh && ./setup.sh
 ```
 
-**Daily authentication** (run once per day):
+### 2. Setup (One-Time)
+
+```bash
+# Windows
+.\setup\setup.ps1
+
+# macOS/Linux
+chmod +x setup/setup.sh && ./setup/setup.sh
+```
+
+### 3. Authenticate (Daily)
+
 ```bash
 gcloud auth application-default login
 gcloud auth application-default set-quota-project licensecorporation-dev
 ```
 
-Then just run `claude` or `gemini` from any terminal.
+### 4. Start
+
+```bash
+claude    # Claude Code
+gemini    # Gemini CLI
+```
 
 ---
 
-## What's Here
+## Why FedRAMP?
 
-| Folder | Purpose |
-|--------|---------|
-| [claude-code/](claude-code/) | Claude Code skills, tools, status line |
-| [gemini-cli/](gemini-cli/) | Gemini CLI configuration |
-| [vertex-ai-model-garden/](vertex-ai-model-garden/) | Models enabled in our FedRAMP data center |
-| [speech-to-text/](speech-to-text/) | WhisperFlow dictation (Ctrl+Shift+Space) |
+| Concern | How FedRAMP Solves It |
+|---------|----------------------|
+| Will AI train on our code? | **No** - contractually prohibited (Google Terms §17) |
+| Where does inference happen? | **us-east5** - US soil, FedRAMP High authorized |
+| Is there an audit trail? | **Yes** - all API calls logged in Cloud Logging |
+| Can we work with federal clients? | **Yes** - FedRAMP High, DoD IL4/IL5 eligible |
 
----
-
-## What Setup Does
-
-Creates symlinks from `~/.claude/` to this repo:
-
-| Your ~/.claude/ | Points to | Purpose |
-|-----------------|-----------|---------|
-| `services/` | `claude-code/agentic-tools/` | Conversation search |
-| `skills/` | `claude-code/skills/` | Context recovery skills |
-| `statusline.ps1` | `claude-code/statusline/` | Rich status line |
-
-After setup:
-- Skills work in any repo
-- `git pull` here updates everyone instantly
-- No per-project configuration needed
+No exceptions. No discussions. Inference from FedRAMP = IP protected.
 
 ---
 
-## Models Available
+## Agentic Tools
 
-See [vertex-ai-model-garden/](vertex-ai-model-garden/) for full details.
+These tools let you partner with AI to write code:
 
-| Model | Region | Use Case |
-|-------|--------|----------|
-| **Claude Opus 4.5** | us-east5 | Complex reasoning, architecture |
-| **Claude Sonnet 4.5** | us-east5 | Daily development |
-| **Claude Haiku 4.5** | us-east5 | Fast tasks, agents |
-| Gemini 2.5 Pro/Flash | us-east5 | FedRAMP alternative |
-| Gemini 3 Pro/Flash | global | Preview (not FedRAMP) |
+| Tool | Description |
+|------|-------------|
+| **Claude Code** | Primary tool. Best-in-class agentic coding. Terminal + IDE integration. |
+| **Gemini CLI** | Google's CLI. Gemini 2.5 (FedRAMP) or 3 Preview (global). |
+| **Speech-to-Text** | WhisperFlow. Local dictation, no cloud. |
 
----
-
-## Compliance
-
-All AI inference through Vertex AI:
-
-| Guarantee | Status |
-|-----------|--------|
-| FedRAMP High | ✅ us-east5 region |
-| DoD IL4/IL5 | ✅ us-east5 region |
-| PCI-DSS | ✅ GCP certified |
-| Data used for training | **Never** (Google Terms §17) |
+We use Claude Code because Anthropic is the only tier-1 LLM provider with models in Google's FedRAMP Vertex AI Model Garden.
 
 ---
 
-## Documentation
+## Legal
 
-| Document | Purpose |
-|----------|---------|
-| [AI-POLICY-v2.md](AI-POLICY-v2.md) | Official AI development policy |
-| [claude-code/README.md](claude-code/README.md) | Claude Code setup and tools |
-| [gemini-cli/README.md](gemini-cli/README.md) | Gemini CLI setup |
-| [vertex-ai-model-garden/README.md](vertex-ai-model-garden/README.md) | What's enabled, how to authenticate |
+By using this repository, you agree to:
+
+1. **AI Policy v2** - [legal/AI-POLICY-v2.md](legal/AI-POLICY-v2.md)
+2. **Your employment/contractor agreement** with License Corporation
+3. **Confidentiality obligations** per your signed agreements
+
+See [ONBOARDING.md](ONBOARDING.md) for full orientation.
 
 ---
 
 ## Contributing
 
 1. Create a branch
-2. Make your changes
+2. Make changes
 3. Open a PR
+4. Get approval (CODEOWNERS enforced)
 
-CODEOWNERS require approval for critical paths. See [.github/CODEOWNERS](.github/CODEOWNERS).
+This repository is the foundation. Treat changes seriously.
 
 ---
 
 ## Questions?
 
-Ask in Slack or open an issue. This repo is meant to evolve with our needs.
+- Slack: #engineering
+- Issues: Open in this repo
+- Legal: legal@licensecorporation.com
