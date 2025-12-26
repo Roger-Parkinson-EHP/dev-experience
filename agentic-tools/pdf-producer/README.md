@@ -1,73 +1,77 @@
 # PDF Producer
 
-Convert Markdown documents to professional PDFs.
+LicenseCorp Markdown to PDF Converter - Professional document generation with legal and modern styling.
 
-## Why
+## Features
 
-Legal documents, policies, and proposals often need PDF format for:
-- Signatures and formal distribution
-- Consistent rendering across devices
-- Archival and compliance
+- **Modern (VS Code) and Legal (Times New Roman) styling**
+- **Auto-generate Table of Contents**
+- **Auto-number sections** (1.1, 1.2.1, etc.)
+- **Mermaid diagram rendering**
+- **Light/dark themes**
 
 ## Quick Start
 
-### Option 1: Pandoc (Recommended)
+```bash
+# Basic conversion
+python markdown_to_pdf.py document.md
+
+# Legal document with TOC and numbering
+python markdown_to_pdf.py contract.md --style legal --toc --numbered
+
+# Dark theme
+python markdown_to_pdf.py README.md --theme dark --output report.pdf
+```
+
+## Options
+
+| Flag | Effect |
+|------|--------|
+| `--style legal` | Times New Roman, justified, Letter size |
+| `--style modern` | VS Code styling (default) |
+| `--toc` | Auto-generate Table of Contents |
+| `--numbered` | Section numbering (1.1, 1.2.1) |
+| `--theme dark` | Dark mode (modern style only) |
+| `-o, --output` | Custom output path |
+
+## Examples
 
 ```bash
-# Install (one-time)
-# Windows: winget install pandoc
-# macOS: brew install pandoc
-# Linux: apt install pandoc
+# Convert AI Policy to PDF
+python markdown_to_pdf.py ../../legal/AI-POLICY-v2.md --style legal --toc
 
-# Convert
-pandoc legal/AI-POLICY-v2.md -o AI-POLICY-v2.pdf
+# Generate dark-themed README
+python markdown_to_pdf.py ../../README.md --theme dark
+
+# Legal contract with full formatting
+python markdown_to_pdf.py contract.md --style legal --toc --numbered -o contracts/final.pdf
 ```
 
-### Option 2: VS Code Extension
-
-1. Install "Markdown PDF" extension
-2. Open any `.md` file
-3. `Ctrl+Shift+P` → "Markdown PDF: Export (pdf)"
-
-### Option 3: Python (markdown-pdf)
+## Dependencies
 
 ```bash
-pip install markdown-pdf
-markdown-pdf legal/AI-POLICY-v2.md
+pip install playwright markdown-it-py
+playwright install chromium
 ```
 
-## Batch Conversion
+The script auto-installs missing dependencies on first run.
 
-Convert all markdown in a folder:
+## Convenience Scripts
 
 ```bash
-# PowerShell
-Get-ChildItem legal/*.md | ForEach-Object { pandoc $_.FullName -o ($_.BaseName + ".pdf") }
+# Unix/macOS
+./md2pdf document.md
 
-# Bash
-for f in legal/*.md; do pandoc "$f" -o "${f%.md}.pdf"; done
+# Windows
+.\md2pdf.ps1 document.md
 ```
 
-## Styling
+## Origin
 
-For branded PDFs, use a custom template:
+Consolidated from InvestorOps tools:
+- `markdown_to_pdf.py` - Core converter
+- `build_ppm.py` - PPM builder
+- `create_numbered_version.py` - Section numbering
+- `auto_generate_toc.py` - TOC generator
 
-```bash
-pandoc doc.md -o doc.pdf --template=templates/lc-template.tex
-```
-
-## Integration with CI/CD
-
-Add to GitHub Actions to auto-generate PDFs on legal document changes:
-
-```yaml
-- name: Generate PDFs
-  run: |
-    sudo apt-get install -y pandoc texlive-latex-base
-    pandoc legal/AI-POLICY-v2.md -o legal/AI-POLICY-v2.pdf
-```
-
-## Related
-
-- [Pandoc Documentation](https://pandoc.org/)
-- [LaTeX Templates](https://www.latextemplates.com/)
+Version 3.0.0 - Unified for License Corporation.
