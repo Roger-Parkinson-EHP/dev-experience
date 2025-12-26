@@ -42,6 +42,9 @@ dev-experience/
 │   ├── pdf-producer/        # Markdown to PDF conversion
 │   └── speech-to-text/      # WhisperFlow dictation
 │
+├── brand/                   # Brand guidelines and assets
+│   └── README.md            # Colors, typography, usage
+│
 ├── fedramp-vertex-ai-model-garden/  # What's enabled in us-east5
 │   ├── README.md                    # Models, auth, compliance
 │   ├── validate-vertex-setup.ps1    # Windows validation
@@ -107,6 +110,21 @@ gemini    # Gemini CLI
 | Can we work with federal clients? | **Yes** - FedRAMP High, DoD IL4/IL5 eligible |
 
 No exceptions. No discussions. Inference from FedRAMP = IP protected.
+
+---
+
+## Intellectual Property
+
+**Everything created through this repository is License Corporation intellectual capital.**
+
+| Principle | What It Means |
+|-----------|---------------|
+| **AI-agnostic ownership** | It doesn't matter which AI assisted. Claude, Gemini, any of them. If it goes through our process, it's ours. |
+| **Safe path** | This repository provides the only approved path for AI-assisted development. Use it and you're protected. |
+| **Audit trail** | All API calls logged. We can identify who's using what, when. |
+| **No leakage** | FedRAMP infrastructure means your code never leaves compliant boundaries, never trains models. |
+
+The dev-experience repository makes you productive AND safe. That's the deal.
 
 ---
 

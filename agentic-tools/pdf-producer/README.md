@@ -66,6 +66,26 @@ The script auto-installs missing dependencies on first run.
 .\md2pdf.ps1 document.md
 ```
 
+## Brand Integration
+
+See [brand/](../../brand/) for License Corporation brand guidelines and colors.
+
+### Recommended Document Styles
+
+| Document Type | Style | Theme | Flags |
+|---------------|-------|-------|-------|
+| Legal contracts | legal | light | `--toc --numbered` |
+| Policies | legal | light | `--toc` |
+| Technical docs | modern | dark | `--toc` |
+| Client-facing | modern | light | - |
+| Internal reports | modern | light/dark | - |
+
+### IP Protection
+
+**Everything created through this tool is License Corporation intellectual capital.**
+
+It doesn't matter which AI assisted - if it goes through our development process, it's ours. The dev-experience repository ensures safe, compliant creation workflows.
+
 ## Origin
 
 Consolidated from InvestorOps tools:
