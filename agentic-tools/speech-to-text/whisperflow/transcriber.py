@@ -86,17 +86,20 @@ class Transcriber:
             if words:
                 initial_prompt = ", ".join(words)
 
-        # Transcribe
+        # Transcribe with optimized settings for speed
         segments, info = self._model.transcribe(
             audio,
             language=lang,
-            beam_size=5,
+            beam_size=1,      # Much faster than beam_size=5
+            best_of=1,        # Faster sampling
             vad_filter=True,  # Voice activity detection
             vad_parameters=dict(
-                min_silence_duration_ms=500,
-                speech_pad_ms=200
+                min_silence_duration_ms=300,  # Faster silence detection
+                speech_pad_ms=100
             ),
-            initial_prompt=initial_prompt  # Helps recognize custom vocabulary
+            initial_prompt=initial_prompt,
+            without_timestamps=True,       # Skip timestamp computation
+            condition_on_previous_text=False  # Each chunk independent = faster
         )
 
         # Combine all segments
