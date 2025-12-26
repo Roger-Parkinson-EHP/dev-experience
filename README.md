@@ -8,10 +8,13 @@ The tools, policies, and infrastructure that enable AI-assisted development whil
 
 ## Vision
 
-> *"This is a place that can turn into an amazing collection of tools that help us work faster and better."*
-> — Jonathan Rose, CEO
+> *[To be validated by Jonathan Rose, CEO]*
 
-**The Goal**: Maximize productivity. Minimize friction. Accelerate development.
+**The Promise**: If you align with the practices in this repository, you will:
+
+1. **Protect your intellectual property** - FedRAMP infrastructure, no training on your code
+2. **Be maximally productive** - AI-assisted development at full speed
+3. **Contribute to our culture** - Standards that make everyone better
 
 This repository, combined with [lc](https://github.com/licensecorporation/lc), forms the productivity engine for License Corporation. Together they deliver:
 
@@ -20,7 +23,7 @@ This repository, combined with [lc](https://github.com/licensecorporation/lc), f
 - **Visualization and observability** throughout the development process
 - **Controls built in by design** - not bolted on as afterthoughts
 
-The storm is coming. This is how we're ready for it.
+**Clone this repo. Follow the practices. You're protected and productive.**
 
 ---
 
@@ -157,12 +160,17 @@ See [ONBOARDING.md](ONBOARDING.md) for full orientation and [ACCESS-CONTROL.md](
 
 ## Contributing
 
-1. Create a branch
+**All changes happen via Pull Request.** No exceptions.
+
+1. Create a branch from `production`
 2. Make changes
 3. Open a PR
-4. Get approval (CODEOWNERS enforced)
+4. Get approval from [CODEOWNERS](.github/CODEOWNERS) (includes @jonsyrose for key files)
+5. Merge after approval
 
-This repository is the foundation. Treat changes seriously.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+
+This repository is the foundation. Changes are reviewed by leadership because they affect everyone.
 
 ---
 

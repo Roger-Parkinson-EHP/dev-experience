@@ -3,33 +3,38 @@
 # This file defines who must approve changes to different parts of the codebase.
 # GitHub requires approval from at least one code owner before merging.
 #
-# WHY THIS MATTERS:
-# dev-experience provisions developers with AI tools. Changes here affect
-# everyone's development environment. Controls are built in by design -
-# these tools don't change casually. Each area has owners with domain expertise.
+# =============================================================================
+# PHILOSOPHY
+# =============================================================================
 #
-# PHILOSOPHY:
-# - Maximize productivity, minimize friction
-# - Accelerate development with AI-assisted workflows
-# - Integrate testing, CI/CD, and visualization into the development process
-# - dev-experience + lc = the productivity engine for License Corporation
+# dev-experience exists to make developers:
+# 1. PRODUCTIVE - AI-assisted development at full speed
+# 2. PROTECTED - IP never compromised, FedRAMP compliant
+# 3. ALIGNED - Contributing to the culture we're building
 #
-# -----------------------------------------------------------------------------
+# Changes here affect everyone's development environment.
+# Controls are built in by design. This doesn't change casually.
+#
+# =============================================================================
+# EXECUTIVE OVERSIGHT
+# =============================================================================
+#
+# Jonathan Rose (CEO) - Vision, culture, legal alignment
+# Must approve: Legal policies, major structural changes, README vision
+#
+# =============================================================================
 
-# Default: Roger approves everything not covered by specific rules
-* @Roger-Parkinson-EHP
+# Default: Roger + Jonathan approve everything
+* @Roger-Parkinson-EHP @jonsyrose
 
-# -----------------------------------------------------------------------------
+# =============================================================================
 # AGENTIC TOOLS - AI-powered development tools
-# Roger has strong opinions on these - they're the core of the productivity stack
-# -----------------------------------------------------------------------------
+# =============================================================================
 
 # Claude Code - Primary AI coding tool
-# Roger: I want to review all changes to Claude Code configuration
-/agentic-tools/claude-code/ @Roger-Parkinson-EHP
+/agentic-tools/claude-code/ @Roger-Parkinson-EHP @jonsyrose
 
 # Speech-to-Text (WhisperFlow) - Voice-driven development
-# Roger: I have an opinion on speech-to-text workflows
 /agentic-tools/speech-to-text/ @Roger-Parkinson-EHP
 
 # Gemini CLI - Alternative AI tool
@@ -38,37 +43,45 @@
 # PDF Producer - Document generation
 /agentic-tools/pdf-producer/ @Roger-Parkinson-EHP
 
-# -----------------------------------------------------------------------------
+# =============================================================================
 # INFRASTRUCTURE - FedRAMP-compliant AI infrastructure
-# This is the foundation of IP protection - changes require careful review
-# -----------------------------------------------------------------------------
+# =============================================================================
 
 # FedRAMP Vertex AI Model Garden - The compliance backbone
-# Roger: You're goddamn right I want to be on this
-/fedramp-vertex-ai-model-garden/ @Roger-Parkinson-EHP
+/fedramp-vertex-ai-model-garden/ @Roger-Parkinson-EHP @jonsyrose
 
-# -----------------------------------------------------------------------------
-# LEGAL - Policies and agreements
-# Multiple stakeholders must review legal/compliance changes
-# -----------------------------------------------------------------------------
+# =============================================================================
+# LEGAL & POLICY - Requires executive approval
+# =============================================================================
 
-# Legal documents require executive and security review
-# TODO: Add @jonathan-rose @mark-security when GitHub accounts are set up
-/legal/ @Roger-Parkinson-EHP
+# Legal documents require CEO review
+/legal/ @Roger-Parkinson-EHP @jonsyrose
 
-# -----------------------------------------------------------------------------
+# Access control policies
+/ACCESS-CONTROL.md @Roger-Parkinson-EHP @jonsyrose
+
+# =============================================================================
+# BRAND - Company identity
+# =============================================================================
+
+/brand/ @Roger-Parkinson-EHP @jonsyrose
+
+# =============================================================================
+# CORE DOCUMENTATION - Sets the tone and expectations
+# =============================================================================
+
+/README.md @Roger-Parkinson-EHP @jonsyrose
+/ONBOARDING.md @Roger-Parkinson-EHP @jonsyrose
+/CONTRIBUTING.md @Roger-Parkinson-EHP @jonsyrose
+
+# =============================================================================
 # SETUP - Developer environment provisioning
-# More people should be involved as team grows
-# -----------------------------------------------------------------------------
+# =============================================================================
 
-# Setup scripts affect everyone's environment
-# TODO: Expand ownership as team grows
 /setup/ @Roger-Parkinson-EHP
 
-# -----------------------------------------------------------------------------
-# FUTURE OWNERS (add when GitHub accounts exist):
-# - @jonathan-rose - CEO, vision and legal
-# - @mark-TBD - Security team lead
-# - @vic-TBD - Engineering
-# - @arnur-TBD - Engineering
-# -----------------------------------------------------------------------------
+# =============================================================================
+# FUTURE OWNERS (add GitHub usernames when available):
+# - @mark-TBD - Security team, SecOps approval
+# - @brad-TBD - Business development, BD-related docs
+# =============================================================================
