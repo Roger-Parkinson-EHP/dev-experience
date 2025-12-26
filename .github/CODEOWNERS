@@ -1,8 +1,74 @@
 # Code Owners for dev-experience repository
-# Changes to these paths require approval from designated owners
 #
-# NOTE: Simplified to @roger-parkinson only during active iteration.
-# Will expand to full team ownership once structure stabilizes.
+# This file defines who must approve changes to different parts of the codebase.
+# GitHub requires approval from at least one code owner before merging.
+#
+# WHY THIS MATTERS:
+# dev-experience provisions developers with AI tools. Changes here affect
+# everyone's development environment. Controls are built in by design -
+# these tools don't change casually. Each area has owners with domain expertise.
+#
+# PHILOSOPHY:
+# - Maximize productivity, minimize friction
+# - Accelerate development with AI-assisted workflows
+# - Integrate testing, CI/CD, and visualization into the development process
+# - dev-experience + lc = the productivity engine for License Corporation
+#
+# -----------------------------------------------------------------------------
 
-# Default owners for everything
-* @roger-parkinson
+# Default: Roger approves everything not covered by specific rules
+* @Roger-Parkinson-EHP
+
+# -----------------------------------------------------------------------------
+# AGENTIC TOOLS - AI-powered development tools
+# Roger has strong opinions on these - they're the core of the productivity stack
+# -----------------------------------------------------------------------------
+
+# Claude Code - Primary AI coding tool
+# Roger: I want to review all changes to Claude Code configuration
+/agentic-tools/claude-code/ @Roger-Parkinson-EHP
+
+# Speech-to-Text (WhisperFlow) - Voice-driven development
+# Roger: I have an opinion on speech-to-text workflows
+/agentic-tools/speech-to-text/ @Roger-Parkinson-EHP
+
+# Gemini CLI - Alternative AI tool
+/agentic-tools/gemini-cli/ @Roger-Parkinson-EHP
+
+# PDF Producer - Document generation
+/agentic-tools/pdf-producer/ @Roger-Parkinson-EHP
+
+# -----------------------------------------------------------------------------
+# INFRASTRUCTURE - FedRAMP-compliant AI infrastructure
+# This is the foundation of IP protection - changes require careful review
+# -----------------------------------------------------------------------------
+
+# FedRAMP Vertex AI Model Garden - The compliance backbone
+# Roger: You're goddamn right I want to be on this
+/fedramp-vertex-ai-model-garden/ @Roger-Parkinson-EHP
+
+# -----------------------------------------------------------------------------
+# LEGAL - Policies and agreements
+# Multiple stakeholders must review legal/compliance changes
+# -----------------------------------------------------------------------------
+
+# Legal documents require executive and security review
+# TODO: Add @jonathan-rose @mark-security when GitHub accounts are set up
+/legal/ @Roger-Parkinson-EHP
+
+# -----------------------------------------------------------------------------
+# SETUP - Developer environment provisioning
+# More people should be involved as team grows
+# -----------------------------------------------------------------------------
+
+# Setup scripts affect everyone's environment
+# TODO: Expand ownership as team grows
+/setup/ @Roger-Parkinson-EHP
+
+# -----------------------------------------------------------------------------
+# FUTURE OWNERS (add when GitHub accounts exist):
+# - @jonathan-rose - CEO, vision and legal
+# - @mark-TBD - Security team lead
+# - @vic-TBD - Engineering
+# - @arnur-TBD - Engineering
+# -----------------------------------------------------------------------------

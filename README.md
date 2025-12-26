@@ -6,6 +6,24 @@ The tools, policies, and infrastructure that enable AI-assisted development whil
 
 ---
 
+## Vision
+
+> *"This is a place that can turn into an amazing collection of tools that help us work faster and better."*
+> — Jonathan Rose, CEO
+
+**The Goal**: Maximize productivity. Minimize friction. Accelerate development.
+
+This repository, combined with [lc](https://github.com/licensecorporation/lc), forms the productivity engine for License Corporation. Together they deliver:
+
+- **AI-assisted development** at full speed, without IP concerns
+- **Integrated testing and CI/CD** baked into the workflow
+- **Visualization and observability** throughout the development process
+- **Controls built in by design** - not bolted on as afterthoughts
+
+The storm is coming. This is how we're ready for it.
+
+---
+
 ## What This Is
 
 This repository provisions developers with compliant AI tools. Clone it, run setup, authenticate, and you're ready to build.
@@ -21,6 +39,7 @@ dev-experience/
 ├── agentic-tools/           # AI-powered development tools
 │   ├── claude-code/         # Claude Code (primary tool)
 │   ├── gemini-cli/          # Gemini CLI (alternative)
+│   ├── pdf-producer/        # Markdown to PDF conversion
 │   └── speech-to-text/      # WhisperFlow dictation
 │
 ├── fedramp-vertex-ai-model-garden/  # What's enabled in us-east5
@@ -99,6 +118,7 @@ These tools let you partner with AI to write code:
 |------|-------------|
 | **Claude Code** | Primary tool. Best-in-class agentic coding. Terminal + IDE integration. |
 | **Gemini CLI** | Google's CLI. Gemini 2.5 (FedRAMP) or 3 Preview (global). |
+| **PDF Producer** | Markdown to PDF. For legal docs, policies, proposals. |
 | **Speech-to-Text** | WhisperFlow. Local dictation, no cloud. |
 
 We use Claude Code because Anthropic is the only tier-1 LLM provider with models in Google's FedRAMP Vertex AI Model Garden.
