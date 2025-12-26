@@ -24,14 +24,14 @@ NC='\033[0m' # No Color
 
 # Paths
 CLAUDE_DIR="$HOME/.claude"
-DEV_EXP_DIR="$(cd "$(dirname "$0")" && pwd)"
+DEV_EXP_DIR="$(cd "$(dirname "$0")/.." && pwd)"  # setup/ is in dev-experience root
 
 # Detect OS for statusline
 detect_statusline() {
     case "$(uname -s)" in
-        Darwin*) echo "$DEV_EXP_DIR/claude-code/statusline/statusline.sh" ;;
-        Linux*)  echo "$DEV_EXP_DIR/claude-code/statusline/statusline.sh" ;;
-        *)       echo "$DEV_EXP_DIR/claude-code/statusline/statusline.ps1" ;;
+        Darwin*) echo "$DEV_EXP_DIR/agentic-tools/claude-code/statusline/statusline.sh" ;;
+        Linux*)  echo "$DEV_EXP_DIR/agentic-tools/claude-code/statusline/statusline.sh" ;;
+        *)       echo "$DEV_EXP_DIR/agentic-tools/claude-code/statusline/statusline.ps1" ;;
     esac
 }
 
@@ -39,8 +39,8 @@ STATUSLINE_TARGET=$(detect_statusline)
 
 # Symlink definitions
 declare -a SYMLINKS=(
-    "$CLAUDE_DIR/services:$DEV_EXP_DIR/claude-code/agentic-tools"
-    "$CLAUDE_DIR/skills:$DEV_EXP_DIR/claude-code/skills"
+    "$CLAUDE_DIR/services:$DEV_EXP_DIR/agentic-tools/claude-code/agentic-tools"
+    "$CLAUDE_DIR/skills:$DEV_EXP_DIR/agentic-tools/claude-code/skills"
     "$CLAUDE_DIR/statusline.sh:$STATUSLINE_TARGET"
 )
 

@@ -34,13 +34,13 @@ $ErrorActionPreference = "Stop"
 
 # Paths
 $claudeDir = "$env:USERPROFILE\.claude"
-$devExpDir = $PSScriptRoot  # Location of this script (dev-experience root)
+$devExpDir = Split-Path $PSScriptRoot -Parent  # setup/ is in dev-experience root
 
 # Symlink definitions: [link path, target path]
 $symlinks = @(
-    @("$claudeDir\services", "$devExpDir\claude-code\agentic-tools"),
-    @("$claudeDir\skills", "$devExpDir\claude-code\skills"),
-    @("$claudeDir\statusline.ps1", "$devExpDir\claude-code\statusline\statusline.ps1")
+    @("$claudeDir\services", "$devExpDir\agentic-tools\claude-code\agentic-tools"),
+    @("$claudeDir\skills", "$devExpDir\agentic-tools\claude-code\skills"),
+    @("$claudeDir\statusline.ps1", "$devExpDir\agentic-tools\claude-code\statusline\statusline.ps1")
 )
 
 function Test-AdminOrDevMode {
