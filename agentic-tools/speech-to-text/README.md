@@ -44,7 +44,7 @@ If you need **100% local/offline** transcription, use LocalWhisper below. It's f
 ### Windows
 
 ```powershell
-cd speech-to-text/whisperflow
+cd speech-to-text/local_whisper
 
 # Create virtual environment
 python -m venv venv

@@ -5,8 +5,8 @@ from typing import Optional, Callable
 import threading
 from faster_whisper import WhisperModel
 
-from whisperflow.utils.config import get_config
-from whisperflow.utils.logger import get_logger, log_exception
+from local_whisper.utils.config import get_config
+from local_whisper.utils.logger import get_logger, log_exception
 
 logger = get_logger(__name__)
 

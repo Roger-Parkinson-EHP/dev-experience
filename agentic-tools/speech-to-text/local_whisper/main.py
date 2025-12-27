@@ -9,7 +9,7 @@ import time
 if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from whisperflow.utils.logger import init_logger, get_logger, log_exception
+from local_whisper.utils.logger import init_logger, get_logger, log_exception
 
 # Initialize logger FIRST
 init_logger()
@@ -55,14 +55,14 @@ from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QThread, pyqtSignal
 
-from whisperflow.audio import AudioRecorder
-from whisperflow.transcriber import Transcriber
-from whisperflow.streaming_transcriber import StreamingTranscriber
-from whisperflow.hotkey import HotkeyHandler
-from whisperflow.utils.clipboard import copy_and_paste
-from whisperflow.utils.config import get_config, save_config
-from whisperflow.utils.media import mute_audio, unmute_audio
-from whisperflow.ui.main_window import WhisperFlowWindow, AppState
+from local_whisper.audio import AudioRecorder
+from local_whisper.transcriber import Transcriber
+from local_whisper.streaming_transcriber import StreamingTranscriber
+from local_whisper.hotkey import HotkeyHandler
+from local_whisper.utils.clipboard import copy_and_paste
+from local_whisper.utils.config import get_config, save_config
+from local_whisper.utils.media import mute_audio, unmute_audio
+from local_whisper.ui.main_window import WhisperFlowWindow, AppState
 
 
 class WhisperFlowApp:
@@ -171,7 +171,7 @@ class WhisperFlowApp:
 
     def _on_paste_last_requested(self) -> None:
         """Handle right-click 'Paste Last Transcript' request."""
-        from whisperflow.utils.clipboard import copy_to_clipboard
+        from local_whisper.utils.clipboard import copy_to_clipboard
         if self._last_transcript:
             logger.info(f"Copying last transcript to clipboard: {len(self._last_transcript)} chars")
             copy_to_clipboard(self._last_transcript)
@@ -400,7 +400,7 @@ def run_self_test() -> bool:
     # Test 2: Audio devices
     logger.info("Test 2: Audio Devices")
     try:
-        from whisperflow.audio import AudioRecorder
+        from local_whisper.audio import AudioRecorder
         devices = AudioRecorder.get_input_devices()
         logger.info(f"  Found {len(devices)} input device(s)")
         for d in devices[:3]:  # Show first 3
@@ -416,7 +416,7 @@ def run_self_test() -> bool:
     # Test 3: Whisper model loading
     logger.info("Test 3: Whisper Model")
     try:
-        from whisperflow.transcriber import Transcriber
+        from local_whisper.transcriber import Transcriber
         transcriber = Transcriber()
         logger.info("  Loading model (this may take a moment)...")
         transcriber.load_model("tiny")  # Use tiny for faster test
@@ -432,7 +432,7 @@ def run_self_test() -> bool:
     # Test 4: Clipboard
     logger.info("Test 4: Clipboard")
     try:
-        from whisperflow.utils.clipboard import copy_to_clipboard, get_clipboard_text
+        from local_whisper.utils.clipboard import copy_to_clipboard, get_clipboard_text
         test_text = "LocalWhisper test 12345"
         copy_to_clipboard(test_text)
         result = get_clipboard_text()
@@ -448,7 +448,7 @@ def run_self_test() -> bool:
     # Test 5: Hotkey registration
     logger.info("Test 5: Hotkey Registration")
     try:
-        from whisperflow.hotkey import HotkeyHandler
+        from local_whisper.hotkey import HotkeyHandler
         handler = HotkeyHandler()
         handler.set_toggle_callback(lambda: None)
         handler.start()

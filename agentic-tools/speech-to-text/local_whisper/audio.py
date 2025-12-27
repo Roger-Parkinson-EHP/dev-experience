@@ -6,7 +6,7 @@ from typing import Optional, Callable
 import threading
 import queue
 
-from whisperflow.utils.logger import get_logger, log_exception
+from local_whisper.utils.logger import get_logger, log_exception
 
 logger = get_logger(__name__)
 

@@ -3,7 +3,7 @@
 Uses Windows Core Audio API (pycaw) for explicit mute control instead of toggle.
 """
 
-from whisperflow.utils.logger import get_logger
+from local_whisper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

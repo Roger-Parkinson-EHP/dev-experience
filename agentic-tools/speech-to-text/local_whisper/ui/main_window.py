@@ -14,7 +14,7 @@ from enum import Enum
 from typing import Optional, List
 import random
 
-from whisperflow.ui.styles import COLORS
+from local_whisper.ui.styles import COLORS
 
 
 class AppState(Enum):
@@ -427,7 +427,7 @@ class WhisperFlowWindow(QWidget):
 
     def contextMenuEvent(self, event) -> None:
         """Show right-click context menu."""
-        from whisperflow.audio import AudioRecorder
+        from local_whisper.audio import AudioRecorder
 
         menu = QMenu(self)
         menu.setStyleSheet(f"""
@@ -468,7 +468,7 @@ class WhisperFlowWindow(QWidget):
         menu.addSeparator()
 
         # Settings submenu
-        from whisperflow.utils.config import get_config
+        from local_whisper.utils.config import get_config
         config = get_config()
 
         settings_menu = menu.addMenu("⚙️ Settings")
