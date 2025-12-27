@@ -1,13 +1,21 @@
 # Speech-to-Text (WhisperFlow)
 
-Local speech-to-text using OpenAI Whisper. Press a hotkey, speak, and text is pasted into your active window.
+Local speech-to-text using OpenAI Whisper (faster-whisper). Press a hotkey, speak, and text is pasted into your active window.
+
+## Privacy
+
+- **100% Local**: All transcription happens on your machine using faster-whisper
+- **No Cloud**: Audio never leaves your computer
+- **No Training**: Your voice data is never used to train models
+- **No Account Required**: Works completely offline after initial setup
 
 ## Features
 
 - **Hotkey activation**: Ctrl+Shift+Space to start/stop recording
+- **Streaming transcription**: Processes audio in real-time during recording
 - **Auto-mute**: System audio mutes during recording
 - **Auto-paste**: Transcribed text pastes automatically
-- **Local processing**: All transcription happens on your machine
+- **Custom vocabulary**: Add domain-specific terms for better recognition
 - **HAL 9000 UI**: Visual indicator when recording
 
 ## Setup
@@ -45,15 +53,42 @@ python main.py
 
 ## Configuration
 
-Edit `utils/config.py` to customize:
+Settings are stored in `~/.whisperflow/config.json`:
+
+```json
+{
+  "model_size": "base",
+  "hotkey": "ctrl+shift+space",
+  "auto_paste": true,
+  "language": "en",
+  "show_preview": true,
+  "audio_device_id": null,
+  "pause_media_while_recording": true,
+  "custom_vocabulary": "Claude, Bazel, WhisperFlow, GitHub"
+}
+```
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `MODEL_SIZE` | `base` | Whisper model (tiny/base/small/medium/large) |
-| `LANGUAGE` | `en` | Target language |
-| `HOTKEY` | `ctrl+shift+space` | Activation hotkey |
+| `model_size` | `base` | Whisper model (tiny/base/small/medium/large) |
+| `language` | `en` | Target language |
+| `hotkey` | `ctrl+shift+space` | Activation hotkey |
+| `auto_paste` | `true` | Automatically paste after transcription |
+| `pause_media_while_recording` | `true` | Mute system audio during recording |
+| `custom_vocabulary` | `""` | Comma-separated terms for better recognition |
+| `audio_device_id` | `null` | Specific microphone (null = system default) |
 
 Larger models are more accurate but slower. `base` is a good balance.
+
+## Custom Vocabulary
+
+Add domain-specific terms to improve recognition accuracy:
+
+```json
+"custom_vocabulary": "Claude Code, Anthropic, Bazel, FedRAMP, licensecorporation-dev, Vertex AI"
+```
+
+These terms are passed to Whisper as an `initial_prompt`, biasing recognition toward your vocabulary.
 
 ## Troubleshooting
 
@@ -63,3 +98,29 @@ Larger models are more accurate but slower. `base` is a good balance.
 | Double paste | Restart WhisperFlow |
 | Mute not working | Run as Administrator (Windows) |
 | Slow transcription | Use smaller model or enable CUDA |
+
+## Architecture
+
+WhisperFlow uses **streaming transcription**:
+
+1. Audio is captured in real-time via `sounddevice`
+2. Every 3 seconds, a chunk is sent to faster-whisper
+3. Partial results display as you speak
+4. On release, final text is ready almost instantly
+
+This is faster than batch mode (transcribing all audio after recording stops).
+
+## Alternatives
+
+| Tool | Pros | Cons |
+|------|------|------|
+| **WhisperFlow** (this) | 100% local, no account, free | Raw Whisper output, no LLM cleanup |
+| **WisprFlow** | LLM post-processing, better fluency | Cloud-based, subscription required |
+| **Aqua Voice** | Best accuracy, screen context | Cloud-based, subscription required |
+
+## Future Improvements
+
+- [ ] LLM post-processing for improved fluency (via Gemini MCP)
+- [ ] Screen context awareness
+- [ ] Voice commands ("scratch that", "new paragraph")
+- [ ] Model selection per-recording (speed vs accuracy)
