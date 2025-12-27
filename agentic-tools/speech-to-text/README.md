@@ -1,8 +1,29 @@
-# Speech-to-Text (WhisperFlow)
+# Speech-to-Text
 
-Local speech-to-text using OpenAI Whisper (faster-whisper). Press a hotkey, speak, and text is pasted into your active window.
+Voice dictation tools for developers.
 
-## Privacy
+## Recommended: WisprFlow
+
+For best accuracy and fluency, use **[WisprFlow](https://wisprflow.com)** ($8/month):
+
+- LLM post-processing cleans up raw transcription
+- Much better fluency than raw Whisper
+- Works in any app (Ctrl+Win+Space)
+- 14-day free trial
+
+**Setup:**
+1. Download from [wisprflow.com](https://wisprflow.com)
+2. Install and sign in
+3. Decline training data usage if desired
+4. Use Ctrl+Win+Space to dictate
+
+---
+
+## Alternative: WhisperFlow (Local)
+
+If you need **100% local/offline** transcription, use WhisperFlow below. It's free but produces raw Whisper output without LLM cleanup.
+
+### Privacy
 
 - **100% Local**: All transcription happens on your machine using faster-whisper
 - **No Cloud**: Audio never leaves your computer
