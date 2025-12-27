@@ -160,20 +160,20 @@ class StreamingTranscriber:
             start_time = time.time()
 
             try:
-                # Fast transcription settings for streaming
+                # Balanced transcription settings - accuracy + speed
                 segments, info = self._model.transcribe(
                     audio,
                     language=lang,
-                    beam_size=1,  # Faster than beam_size=5
-                    best_of=1,    # Faster sampling
+                    beam_size=3,  # Better accuracy than 1, still fast
+                    best_of=2,    # Consider 2 candidates
                     vad_filter=True,
                     vad_parameters=dict(
                         min_silence_duration_ms=300,
                         speech_pad_ms=100
                     ),
                     initial_prompt=initial_prompt,
-                    without_timestamps=True,  # Faster without timestamps
-                    condition_on_previous_text=False  # Faster, each chunk independent
+                    without_timestamps=True,  # Skip timestamp computation
+                    condition_on_previous_text=False  # Each chunk independent
                 )
 
                 # Collect text
