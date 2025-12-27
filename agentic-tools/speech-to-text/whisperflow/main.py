@@ -187,7 +187,7 @@ class WhisperFlowApp:
     def _setup_tray(self) -> None:
         """Set up system tray icon."""
         self.tray = QSystemTrayIcon()
-        self.tray.setToolTip("WhisperFlow")
+        self.tray.setToolTip("LocalWhisper")
 
         menu = QMenu()
         show_action = QAction("Show/Hide", menu)
@@ -212,7 +212,7 @@ class WhisperFlowApp:
 
     def _quit(self) -> None:
         """Clean up and quit."""
-        logger.info("Quitting WhisperFlow")
+        logger.info("Quitting LocalWhisper")
         self.hotkey_handler.stop()
         save_config()
         self.app.quit()
@@ -351,7 +351,7 @@ class WhisperFlowApp:
     def run(self) -> int:
         """Run the application."""
         try:
-            logger.info("Starting WhisperFlow")
+            logger.info("Starting LocalWhisper")
 
             # Show window
             self.window.show()
@@ -367,7 +367,7 @@ class WhisperFlowApp:
 
             config = get_config()
             logger.info(f"Hotkey: {config.hotkey}")
-            logger.info("WhisperFlow ready!")
+            logger.info("LocalWhisper ready!")
 
             # Run event loop
             return self.app.exec()
@@ -380,7 +380,7 @@ class WhisperFlowApp:
 def run_self_test() -> bool:
     """Run automated self-test to verify all components work."""
     logger.info("=" * 60)
-    logger.info("Running WhisperFlow Self-Test")
+    logger.info("Running LocalWhisper Self-Test")
     logger.info("=" * 60)
 
     all_passed = True
@@ -433,7 +433,7 @@ def run_self_test() -> bool:
     logger.info("Test 4: Clipboard")
     try:
         from whisperflow.utils.clipboard import copy_to_clipboard, get_clipboard_text
-        test_text = "WhisperFlow test 12345"
+        test_text = "LocalWhisper test 12345"
         copy_to_clipboard(test_text)
         result = get_clipboard_text()
         if result == test_text:
@@ -492,7 +492,7 @@ def main() -> None:
     # Install global exception handler
     sys.excepthook = exception_hook
 
-    parser = argparse.ArgumentParser(description="WhisperFlow - Local speech-to-text")
+    parser = argparse.ArgumentParser(description="LocalWhisper - Local speech-to-text")
     parser.add_argument("--test", action="store_true", help="Run self-test")
     parser.add_argument("--log-level", default="DEBUG", help="Log level (DEBUG, INFO, WARNING, ERROR)")
     parser.add_argument("--no-kill", action="store_true", help="Don't kill prior instances")

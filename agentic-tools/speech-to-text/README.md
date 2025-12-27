@@ -19,9 +19,9 @@ For best accuracy and fluency, use **[WisprFlow](https://wisprflow.com)** ($8/mo
 
 ---
 
-## Alternative: WhisperFlow (Local)
+## Alternative: LocalWhisper
 
-If you need **100% local/offline** transcription, use WhisperFlow below. It's free but produces raw Whisper output without LLM cleanup.
+If you need **100% local/offline** transcription, use LocalWhisper below. It's free but produces raw Whisper output without LLM cleanup.
 
 ### Privacy
 
@@ -65,7 +65,7 @@ python main.py
 
 ## Usage
 
-1. Start WhisperFlow (`python main.py`)
+1. Start LocalWhisper (`python main.py`)
 2. Look for the HAL 9000 eye indicator
 3. Press **Ctrl+Shift+Space** to start recording
 4. Speak your text
@@ -85,7 +85,7 @@ Settings are stored in `~/.whisperflow/config.json`:
   "show_preview": true,
   "audio_device_id": null,
   "pause_media_while_recording": true,
-  "custom_vocabulary": "Claude, Bazel, WhisperFlow, GitHub"
+  "custom_vocabulary": "Claude, Bazel, LocalWhisper, GitHub"
 }
 ```
 
@@ -116,13 +116,13 @@ These terms are passed to Whisper as an `initial_prompt`, biasing recognition to
 | Issue | Solution |
 |-------|----------|
 | No transcription | Check microphone permissions |
-| Double paste | Restart WhisperFlow |
+| Double paste | Restart LocalWhisper |
 | Mute not working | Run as Administrator (Windows) |
 | Slow transcription | Use smaller model or enable CUDA |
 
 ## Architecture
 
-WhisperFlow uses **streaming transcription**:
+LocalWhisper uses **streaming transcription**:
 
 1. Audio is captured in real-time via `sounddevice`
 2. Every 3 seconds, a chunk is sent to faster-whisper
@@ -135,7 +135,7 @@ This is faster than batch mode (transcribing all audio after recording stops).
 
 | Tool | Pros | Cons |
 |------|------|------|
-| **WhisperFlow** (this) | 100% local, no account, free | Raw Whisper output, no LLM cleanup |
+| **LocalWhisper** (this) | 100% local, no account, free | Raw Whisper output, no LLM cleanup |
 | **WisprFlow** | LLM post-processing, better fluency | Cloud-based, subscription required |
 | **Aqua Voice** | Best accuracy, screen context | Cloud-based, subscription required |
 
