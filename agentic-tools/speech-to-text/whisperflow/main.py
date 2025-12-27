@@ -57,6 +57,7 @@ from PyQt6.QtCore import QThread, pyqtSignal
 
 from whisperflow.audio import AudioRecorder
 from whisperflow.transcriber import Transcriber
+from whisperflow.streaming_transcriber import StreamingTranscriber
 from whisperflow.hotkey import HotkeyHandler
 from whisperflow.utils.clipboard import copy_and_paste
 from whisperflow.utils.config import get_config, save_config
@@ -84,6 +85,9 @@ class WhisperFlowApp:
 
             self.transcriber = Transcriber()
             logger.debug("Transcriber created")
+
+            self.streaming_transcriber = StreamingTranscriber()
+            logger.debug("StreamingTranscriber created")
 
             self.hotkey_handler = HotkeyHandler()
             logger.debug("HotkeyHandler created")
@@ -113,6 +117,10 @@ class WhisperFlowApp:
             lambda level: self.window.update_audio_level(level)
         )
         self.transcriber.set_model_loaded_callback(self._on_model_loaded)
+        self.streaming_transcriber.set_model_loaded_callback(self._on_model_loaded)
+        self.streaming_transcriber.set_partial_result_callback(
+            lambda text: self.window.update_live_text(text[-80:] if len(text) > 80 else text)
+        )
         self.window.paste_last_requested.connect(self._on_paste_last_requested)
         self.window.device_change_requested.connect(self._on_device_change)
         self.window.toggle_mute_requested.connect(self._on_toggle_mute)
@@ -220,14 +228,13 @@ class WhisperFlowApp:
     def _start_recording(self) -> None:
         """Start recording audio."""
         try:
-            if not self.transcriber.is_ready:
+            if not self.streaming_transcriber.is_ready:
                 logger.warning("Cannot start recording - model not ready")
                 return
 
             logger.info("Starting recording")
             self._is_recording = True
             self._recording_start_time = time.time()
-            self._last_live_transcription = ""
 
             # Mute system audio while recording
             config = get_config()
@@ -245,46 +252,17 @@ class WhisperFlowApp:
             self._recording_timer.timeout.connect(self._on_recording_timeout)
             self._recording_timer.start(60000)  # 60 second max
 
-            # Start live transcription in a separate thread
-            self._live_transcription_running = True
-            import threading
-            self._live_transcription_thread = threading.Thread(
-                target=self._live_transcription_loop,
-                daemon=True
+            # Start streaming transcription
+            self.streaming_transcriber.start_streaming()
+            self.recorder.set_stream_chunk_callback(
+                self.streaming_transcriber.add_audio
             )
-            self._live_transcription_thread.start()
-            logger.debug("Live transcription thread started")
+            logger.debug("Streaming transcription started")
 
         except Exception as e:
             log_exception(logger, "Failed to start recording", e)
             self._is_recording = False
             self.window.set_state(AppState.IDLE)
-
-    def _live_transcription_loop(self) -> None:
-        """Background thread loop for live transcription."""
-        import numpy as np
-        while self._live_transcription_running and self._is_recording:
-            try:
-                time.sleep(1.5)  # Transcribe every 1.5 seconds
-
-                if not self._is_recording:
-                    break
-
-                # Get current audio data without stopping recording
-                if self.recorder._audio_data:
-                    audio = np.concatenate(self.recorder._audio_data)
-                    logger.debug(f"Live transcription: {len(audio)} samples")
-
-                    if len(audio) > 24000:  # At least 1.5 seconds of audio
-                        text = self.transcriber.transcribe(audio)
-                        if text and text != self._last_live_transcription:
-                            self._last_live_transcription = text
-                            # Show last 80 chars for scrolling effect
-                            display_text = text[-80:] if len(text) > 80 else text
-                            self.window.update_live_text(display_text)
-                            logger.debug(f"Live text updated: {len(text)} chars")
-            except Exception as e:
-                logger.debug(f"Live transcription error: {e}")
 
     def _on_recording_timeout(self) -> None:
         """Handle recording timeout - auto-stop after max time."""
@@ -298,14 +276,15 @@ class WhisperFlowApp:
             if not self._is_recording:
                 return
 
-            # Cancel timers and threads
+            # Cancel timers
             if hasattr(self, '_recording_timer') and self._recording_timer:
                 self._recording_timer.stop()
-            if hasattr(self, '_live_transcription_running'):
-                self._live_transcription_running = False
 
             logger.info("Stopping recording")
             self._is_recording = False
+
+            # Stop streaming callback
+            self.recorder.set_stream_chunk_callback(None)
 
             # Unmute system audio
             config = get_config()
@@ -314,14 +293,15 @@ class WhisperFlowApp:
 
             self.window.set_state(AppState.PROCESSING)
 
-            audio = self.recorder.stop_recording()
-            logger.debug(f"Recorded {len(audio)} samples")
+            # Stop recorder and streaming transcriber
+            self.recorder.stop_recording()
+            final_text = self.streaming_transcriber.stop_streaming()
+            logger.debug(f"Streaming transcription complete: {len(final_text)} chars")
 
-            if len(audio) > 0:
-                logger.info("Starting transcription")
-                self.transcriber.transcribe_async(audio, self._on_transcription_done)
+            if final_text:
+                self._on_transcription_done(final_text)
             else:
-                logger.warning("No audio recorded")
+                logger.warning("No transcription result")
                 self.window.set_state(AppState.IDLE)
 
         except Exception as e:
@@ -377,10 +357,10 @@ class WhisperFlowApp:
             self.window.show()
             logger.debug("Window displayed")
 
-            # Start loading model in background
+            # Start loading model in background (streaming transcriber for real-time)
             self.window.set_state(AppState.LOADING)
             logger.info("Loading Whisper model in background...")
-            self.transcriber.load_model_async()
+            self.streaming_transcriber.load_model_async()
 
             # Start hotkey listener
             self.hotkey_handler.start()

@@ -24,6 +24,7 @@ class AudioRecorder:
         self._audio_data: list = []
         self._stream: Optional[sd.InputStream] = None
         self._on_audio_level: Optional[Callable[[float], None]] = None
+        self._on_stream_chunk: Optional[Callable[[np.ndarray], None]] = None
         self._device_id = device_id  # None = default device
 
     def set_device(self, device_id: Optional[int]) -> None:
@@ -39,6 +40,10 @@ class AudioRecorder:
         """Set callback for audio level updates (for UI visualization)."""
         self._on_audio_level = callback
 
+    def set_stream_chunk_callback(self, callback: Optional[Callable[[np.ndarray], None]]) -> None:
+        """Set callback for streaming audio chunks (for real-time transcription)."""
+        self._on_stream_chunk = callback
+
     def _audio_callback(self, indata: np.ndarray, frames: int,
                         time_info: dict, status: sd.CallbackFlags) -> None:
         """Callback for audio stream."""
@@ -53,6 +58,10 @@ class AudioRecorder:
         if self._on_audio_level:
             level = np.abs(audio_chunk).mean()
             self._on_audio_level(float(level))
+
+        # Send chunk to streaming transcriber if configured
+        if self._on_stream_chunk:
+            self._on_stream_chunk(audio_chunk)
 
     def start_recording(self) -> None:
         """Start recording audio."""

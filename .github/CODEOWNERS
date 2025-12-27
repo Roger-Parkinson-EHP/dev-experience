@@ -81,7 +81,15 @@
 /setup/ @Roger-Parkinson-EHP
 
 # =============================================================================
+# ADDITIONAL REVIEWERS
+# =============================================================================
+
+# Andre Talbert - Long-time employee, general reviewer
+# Can review: Any area of the codebase
+/agentic-tools/ @talbert-andre
+
+# =============================================================================
 # FUTURE OWNERS (add GitHub usernames when available):
-# - @mark-TBD - Security team, SecOps approval
-# - @brad-TBD - Business development, BD-related docs
+# - Mark (CISO) - Security team, SecOps approval - username TBD
+# - Brad (COO) - Business development, BD-related docs - not in org yet
 # =============================================================================
